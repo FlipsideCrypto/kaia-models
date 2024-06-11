@@ -1,9 +1,9 @@
 {% docs __overview__ %}
 
-# Welcome to the Flipside Crypto kaia Models Documentation!
+# Welcome to the Flipside Crypto Kaia Models Documentation!
 
 ## **What does this documentation cover?**
-The documentation included here details the design of the kaia tables and views available via [Flipside Crypto.](https://flipsidecrypto.xyz/) For more information on how these models are built, please see [the github repository.](https://github.com/FlipsideCrypto/kaia-models)
+The documentation included here details the design of the Kaia tables and views available via [Flipside Crypto.](https://flipsidecrypto.xyz/) For more information on how these models are built, please see [the github repository.](https://github.com/FlipsideCrypto/kaia-models)
 
 ## **How do I use these docs?**
 The easiest way to navigate this documentation is to use the Quick Links below. These links will take you to the documentation for each table, which contains a description, a list of the columns, and other helpful information.
@@ -24,8 +24,10 @@ There is more information on how to use dbt docs in the last section of this doc
 **Fact Tables:**
 - [fact_blocks](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.core__fact_blocks)
 - [fact_event_logs](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.core__fact_event_logs)
-- [fact_traces](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.core__fact_traces)
 - [fact_transactions](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.core__fact_transactions)
+
+***Please note that the traces are still a WIP as we work to resolve issues with our node provider***
+- [fact_traces](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.core__fact_traces)
 
 ## **Helpful User-Defined Functions (UDFs)**
 

@@ -77,7 +77,7 @@ The amount of nested sub traces for this trace.
 
 {% docs kaia_traces_table_doc %}
 
-This table contains flattened trace data for internal contract calls on the kaia Blockchain. Hex encoded fields can be decoded to integers by using `utils.udf_hex_to_int()`.
+NOTE: We are experiencing issues with our `debug_traceBlockByNumber` calls. You may notice missing data in this table. We are working hard to resolve this ASAP with our node providers. This table contains flattened trace data for internal contract calls on the kaia Blockchain. Hex encoded fields can be decoded to integers by using `utils.udf_hex_to_int()`.
 
 {% enddocs %}
 
