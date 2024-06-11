@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: klaytn_silver
+    database: klaytn
+    schema: silver
+    tables:
+      - name: labels
+      - name: blocks
+      - name: logs
+      - name: receipts
+      - name: traces
+      - name: transactions
