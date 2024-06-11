@@ -11,3 +11,9 @@ sources:
       - name: receipts
       - name: traces
       - name: transactions
+      
+  - name: github_actions
+    database: kaia
+    schema: github_actions
+    tables:
+      - name: workflows
