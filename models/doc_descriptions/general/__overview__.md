@@ -26,7 +26,7 @@ There is more information on how to use dbt docs in the last section of this doc
 - [fact_event_logs](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.core__fact_event_logs)
 - [fact_transactions](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.core__fact_transactions)
 
-***Please note that the traces are still a WIP as we work to resolve issues with our node provider***
+***Please note that the traces are reliable starting on June 1st, 2024. We are in the process of backfilling traces further.***
 - [fact_traces](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.core__fact_traces)
 
 ## **Helpful User-Defined Functions (UDFs)**
