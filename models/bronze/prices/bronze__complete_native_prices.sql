@@ -25,5 +25,5 @@ FROM
         'complete_native_prices'
     ) }}
 WHERE
-    blockchain = 'klaytn'
+    blockchain IN ('klaytn','kaia')
     AND symbol = 'KLAY'

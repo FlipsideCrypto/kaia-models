@@ -28,4 +28,4 @@ FROM
         'complete_token_prices'
     ) }}
 WHERE
-    blockchain = 'klaytn'
+    blockchain IN ('klaytn','kaia')

@@ -25,4 +25,4 @@ FROM
         'complete_token_asset_metadata'
     ) }}
 WHERE
-    blockchain = 'klaytn'
+    blockchain IN ('klaytn','kaia')
