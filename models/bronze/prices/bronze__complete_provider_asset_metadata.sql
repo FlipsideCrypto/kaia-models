@@ -23,4 +23,3 @@ FROM
     ) }}
 WHERE
     platform = 'Klaytn'
--- platforms specific to Blast
