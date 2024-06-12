@@ -7,7 +7,7 @@
 ) }}
 
 SELECT
-    blockchain,
+    'kaia' AS blockchain,
     creator,
     address,
     address_name,
