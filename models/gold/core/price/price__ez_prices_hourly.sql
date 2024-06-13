@@ -1,7 +1,8 @@
 {{ config(
-    materialized = 'view',
-    persist_docs ={ "relation": true,
-    "columns": true }
+    materialized = 'incremental',
+    incremental_strategy = 'delete+insert',
+    unique_key = 'ez_prices_hourly_id',
+    tags = ['non_realtime']
 ) }}
 
 SELECT
@@ -20,6 +21,17 @@ SELECT
     complete_token_prices_id AS ez_prices_hourly_id
 FROM
     {{ ref('silver__complete_token_prices') }}
+{% if is_incremental() %}
+WHERE
+    modified_timestamp >= (
+        SELECT
+            MAX(
+                modified_timestamp
+            )
+        FROM
+            {{ this }}
+    )
+{% endif %}
 UNION ALL
 SELECT
     HOUR,
@@ -37,3 +49,14 @@ SELECT
     complete_native_prices_id AS ez_prices_hourly_id
 FROM
     {{ ref('silver__complete_native_prices') }}
+{% if is_incremental() %}
+WHERE
+    modified_timestamp >= (
+        SELECT
+            MAX(
+                modified_timestamp
+            )
+        FROM
+            {{ this }}
+    )
+{% endif %}

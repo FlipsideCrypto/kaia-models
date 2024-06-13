@@ -22,5 +22,5 @@ FROM
         'complete_native_asset_metadata'
     ) }}
 WHERE
-    blockchain IN ('klaytn','kaia')
+    blockchain = 'klaytn'
     AND symbol = 'KLAY'

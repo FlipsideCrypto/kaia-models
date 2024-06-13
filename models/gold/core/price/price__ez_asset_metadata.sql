@@ -1,7 +1,8 @@
 {{ config(
-    materialized = 'view',
-    persist_docs ={ "relation": true,
-    "columns": true }
+    materialized = 'incremental',
+    incremental_strategy = 'delete+insert',
+    unique_key = 'ez_asset_metadata_id',
+    tags = ['non_realtime']
 ) }}
 
 SELECT
@@ -18,6 +19,17 @@ SELECT
     complete_token_asset_metadata_id AS ez_asset_metadata_id
 FROM
     {{ ref('silver__complete_token_asset_metadata') }}
+{% if is_incremental() %}
+WHERE
+    modified_timestamp >= (
+        SELECT
+            MAX(
+                modified_timestamp
+            )
+        FROM
+            {{ this }}
+    )
+{% endif %}
 UNION ALL
 SELECT
     NULL AS token_address,
@@ -33,3 +45,14 @@ SELECT
     complete_native_asset_metadata_id AS ez_asset_metadata_id
 FROM
     {{ ref('silver__complete_native_asset_metadata') }}
+{% if is_incremental() %}
+WHERE
+    modified_timestamp >= (
+        SELECT
+            MAX(
+                modified_timestamp
+            )
+        FROM
+            {{ this }}
+    )
+{% endif %}

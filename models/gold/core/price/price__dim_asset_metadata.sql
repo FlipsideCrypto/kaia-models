@@ -1,8 +1,10 @@
 {{ config(
-    materialized = 'view',
-    persist_docs ={ "relation": true,
-    "columns": true }
+    materialized = 'incremental',
+    incremental_strategy = 'delete+insert',
+    unique_key = 'dim_asset_metadata_id',
+    tags = ['non_realtime']
 ) }}
+
 
 SELECT
     token_address,
@@ -17,3 +19,14 @@ SELECT
     complete_provider_asset_metadata_id AS dim_asset_metadata_id
 FROM
     {{ ref('silver__complete_provider_asset_metadata') }}
+{% if is_incremental() %}
+WHERE
+    modified_timestamp >= (
+        SELECT
+            MAX(
+                modified_timestamp
+            )
+        FROM
+            {{ this }}
+    )
+{% endif %}
