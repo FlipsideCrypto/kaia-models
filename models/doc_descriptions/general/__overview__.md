@@ -30,10 +30,10 @@ There is more information on how to use dbt docs in the last section of this doc
 - [fact_traces](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.core__fact_traces)
 
 ### Price Tables (ethereum.price)
-- [dim_asset_metadata](https://flipsidecrypto.github.io/ethereum-models/#!/model/model.ethereum_models.price__dim_asset_metadata)
-- [fact_prices_ohlc_hourly](https://flipsidecrypto.github.io/ethereum-models/#!/model/model.ethereum_models.price__fact_prices_ohlc_hourly)
-- [ez_asset_metadata](https://flipsidecrypto.github.io/ethereum-models/#!/model/model.ethereum_models.price__ez_asset_metadata)
-- [ez_prices_hourly](https://flipsidecrypto.github.io/ethereum-models/#!/model/model.ethereum_models.price__ez_prices_hourly)
+- [dim_asset_metadata](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.price__dim_asset_metadata)
+- [fact_prices_ohlc_hourly](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.price__fact_prices_ohlc_hourly)
+- [ez_asset_metadata](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.price__ez_asset_metadata)
+- [ez_prices_hourly](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.price__ez_prices_hourly)
 
 ## **Helpful User-Defined Functions (UDFs)**
 
