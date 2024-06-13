@@ -29,6 +29,12 @@ There is more information on how to use dbt docs in the last section of this doc
 ***Please note that the traces are reliable starting on June 1st, 2024. We are in the process of backfilling traces further.***
 - [fact_traces](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.core__fact_traces)
 
+### Price Tables (ethereum.price)
+- [dim_asset_metadata](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.price__dim_asset_metadata)
+- [fact_prices_ohlc_hourly](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.price__fact_prices_ohlc_hourly)
+- [ez_asset_metadata](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.price__ez_asset_metadata)
+- [ez_prices_hourly](https://flipsidecrypto.github.io/kaia-models/#!/model/model.kaia_models.price__ez_prices_hourly)
+
 ## **Helpful User-Defined Functions (UDFs)**
 
 UDFs are custom functions built by the Flipside team that can be used in your queries to make your life easier. 
