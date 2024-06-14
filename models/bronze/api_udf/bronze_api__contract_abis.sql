@@ -50,8 +50,8 @@ row_nos AS (
 batched AS ({% for item in range(150) %}
 SELECT
     rn.contract_address, 
-    live.udf_api(concat('https://api-cypress.klaytnscope.com/v2/accounts/',contract_address)) as response,
-    parse_json(response:data:result:matchedContract:contractAbi) as abi,
+    klaytn.live.udf_api(concat('https://api-cypress.klaytnscope.com/v2/accounts/',contract_address)) as response,
+    parse_json(response:data:result:matchedContract:contractAbi) as abi_data,
     SYSDATE() AS _inserted_timestamp
 FROM
     row_nos rn

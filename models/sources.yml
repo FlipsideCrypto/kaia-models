@@ -36,7 +36,7 @@ sources:
   - name: bronze_streamline
     database: streamline
     schema: |
-      {{ "KAIA_DEV" if var("STREAMLINE_USE_DEV_FOR_EXTERNAL_TABLES", False) else "KAIA" }}
+      {{ "  KLAYTN_DEV" if var("STREAMLINE_USE_DEV_FOR_EXTERNAL_TABLES", False) else "KLAYTN" }}
     tables:
       - name: contract_abis
   - name: kaia_silver
@@ -45,7 +45,7 @@ sources:
     tables:
       - name: verified_abis
   - name: kaia_bronze_api
-    database: kaia
+    database: kaia_dev
     schema: bronze_api
     tables:
       - name: contract_abis

@@ -6,7 +6,7 @@
     tags = ['abis']
 ) }}
 
-WITH meta AS (
+{# WITH meta AS (
 
     SELECT
         registered_on,
@@ -116,16 +116,16 @@ all_abis AS (
         abi_hash
     FROM
         user_abis
-)
+) #}
 SELECT
-    contract_address,
-    DATA,
-    _inserted_timestamp,
-    abi_source,
-    discord_username,
-    abi_hash
-FROM
-    all_abis 
-WHERE DATA :: STRING <> 'Unknown Exception' qualify(ROW_NUMBER() over(PARTITION BY contract_address
+    NULL AS contract_address,
+    NULL AS DATA,
+    NULL AS _inserted_timestamp,
+    NULL AS abi_source,
+    NULL AS discord_username,
+    NULL AS abi_hash
+{# FROM
+    all_abis  #}
+{# WHERE DATA :: STRING <> 'Unknown Exception' qualify(ROW_NUMBER() over(PARTITION BY contract_address
 ORDER BY
-    _INSERTED_TIMESTAMP DESC)) = 1
+    _INSERTED_TIMESTAMP DESC)) = 1 #}
