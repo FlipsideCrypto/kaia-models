@@ -13,7 +13,7 @@ sources:
       - name: transactions
       
   - name: github_actions
-    database: kaia
+    database: kaia_dev
     schema: github_actions
     tables:
       - name: workflows
@@ -40,7 +40,7 @@ sources:
     tables:
       - name: contract_abis
   - name: kaia_silver
-    database: kaia
+    database: kaia_dev
     schema: silver
     tables:
       - name: verified_abis
