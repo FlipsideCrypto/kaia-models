@@ -21,7 +21,7 @@ SELECT
 FROM
     {{ this }}
 WHERE
-    abi_data :data :result :: STRING <> 'Max rate limit reached'
+    abi_data :status_code :: INTEGER = 200
 {% endif %}
 LIMIT
     50
