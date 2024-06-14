@@ -1,4 +1,3 @@
-  -- depends_on: {{ ref('_retry_abis') }}
 {{ config(
     materialized = 'incremental',
     unique_key = "contract_address",
@@ -32,13 +31,6 @@ all_contracts AS (
         contract_address
     FROM
         base
-{% if is_incremental() %}
-    UNION
-    SELECT
-        contract_address
-    FROM
-        {{ ref('_retry_abis') }}
-{% endif %}
 ),
 row_nos AS (
     SELECT
