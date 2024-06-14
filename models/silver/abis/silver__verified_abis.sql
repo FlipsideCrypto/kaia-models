@@ -9,7 +9,7 @@ WITH base AS (
     SELECT
         contract_address,
         PARSE_JSON(
-            abi_data :data :result
+            abi_data :data :result:matchedContract:contractAbi
         ) AS DATA,
         _inserted_timestamp
     FROM
