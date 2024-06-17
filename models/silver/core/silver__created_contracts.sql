@@ -24,8 +24,7 @@ FROM
     {{ source(
         'klaytn_silver',
         'traces'
-        ) }} 
-
+    ) }}
 WHERE
     TYPE ILIKE 'create%'
     AND to_address IS NOT NULL
