@@ -11,12 +11,6 @@ sources:
       - name: receipts
       - name: traces
       - name: transactions
-  - name: klaytn_bronze
-    database: klaytn
-    schema: bronze
-    tables:
-      - name: decoded_logs
-      - name: fr_decoded_logs
   - name: github_actions
     database: kaia
     schema: github_actions
