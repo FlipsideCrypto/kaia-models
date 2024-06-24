@@ -1,4 +1,4 @@
-{% macro missing_txs(
+{# {% macro missing_txs(
         model, 
         where_clause=None
     ) %}
@@ -70,7 +70,7 @@ FROM
 WHERE
     model_tx_hash IS NULL
     OR model_block_number IS NULL
-{% endmacro %}
+{% endmacro %} #}
 
 {% macro gold_missing_txs(
         model,
