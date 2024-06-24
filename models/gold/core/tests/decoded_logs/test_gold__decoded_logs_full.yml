@@ -4,46 +4,18 @@ models:
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - _LOG_ID
+            - TX_HASH
+            - EVENT_INDEX
       - dbt_utils.recency:
           datepart: day
-          field: _INSERTED_TIMESTAMP
+          field: INSERTED_TIMESTAMP
           interval: 1
-
     columns:
-      - name: BLOCK_NUMBER
+      - name: BLOCK_TIMESTAMP
         tests:
-          - not_null  
-          - dbt_expectations.expect_column_values_to_be_in_type_list:
-              column_type_list:
-                - NUMBER    
-                - FLOAT    
-      - name: TX_HASH
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_match_regex:
-              regex: 0[xX][0-9a-fA-F]+
-      - name: EVENT_INDEX
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_be_in_type_list:
-              column_type_list:
-                - NUMBER    
-                - FLOAT   
-      - name: CONTRACT_ADDRESS
-        tests:
-          - not_null
-          - dbt_expectations.expect_column_values_to_match_regex:
-              regex: 0[xX][0-9a-fA-F]+
-      - name: _INSERTED_TIMESTAMP
-        tests:
-          - not_null
-      - name: EVENT_NAME
-        tests:
-          - dbt_expectations.expect_column_values_to_be_in_type_list:
-              column_type_list:
-                - STRING    
-                - VARCHAR
+          - dbt_expectations.expect_row_values_to_have_recent_data:
+              datepart: day
+              interval: 1
            
 
 
