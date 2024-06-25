@@ -1,12 +1,8 @@
-{{ config (
-    materialized = "incremental",
-    unique_key = ['block_number', 'event_index'],
-    cluster_by = "block_timestamp::date",
-    incremental_predicates = ["dynamic_range", "block_number"],
-    post_hook = "ALTER TABLE {{ this }} ADD SEARCH OPTIMIZATION",
-    merge_exclude_columns = ["inserted_timestamp"],
-    tags = ['decoded_logs','reorg']
-) }}    
+{{ config(
+    materialized = 'view',
+    persist_docs ={ "relation": true,
+    "columns": true }
+) }}
 
 SELECT
     block_number,
@@ -32,12 +28,3 @@ FROM
     {{ ref('silver__decoded_logs') }}
     l
     LEFT JOIN {{ ref('silver__contracts') }} C USING (contract_address)
-{% if is_incremental() %}
-WHERE
-    modified_timestamp > (
-        SELECT
-            MAX(modified_timestamp)
-        FROM
-            {{ this }}
-    )
-{% endif %}
