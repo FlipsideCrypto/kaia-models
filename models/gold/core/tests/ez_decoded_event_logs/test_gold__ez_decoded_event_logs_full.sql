@@ -6,5 +6,4 @@
 SELECT
     *
 FROM
-    {{ ref('core__fact_decoded_event_logs') }}
-{{ ref('silver__')}}
+    {{ ref('core__ez_decoded_event_logs') }}

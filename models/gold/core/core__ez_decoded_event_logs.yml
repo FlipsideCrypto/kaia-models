@@ -55,7 +55,7 @@ models:
         description: '{{ doc("kaia_logs_data") }}'
       - name: EVENT_REMOVED
         description: '{{ doc("kaia_event_removed") }}' 
-      - name: TX_STATUS
+      - name: TX_SUCCEEDED
         description: '{{ doc("kaia_tx_status") }}' 
       - name: EZ_DECODED_EVENT_LOGS_ID
         description: '{{ doc("pk") }}'   

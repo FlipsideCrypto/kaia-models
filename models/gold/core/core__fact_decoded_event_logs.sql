@@ -1,11 +1,12 @@
-{{ config(
-    materialized = 'incremental',
-    incremental_strategy = 'delete+insert',
-    unique_key = "block_number",
+{{ config (
+    materialized = "incremental",
+    unique_key = ['block_number', 'event_index'],
     cluster_by = "block_timestamp::date",
+    incremental_predicates = ["dynamic_range", "block_number"],
     post_hook = "ALTER TABLE {{ this }} ADD SEARCH OPTIMIZATION",
-    tags = ['decoded_logs']
-) }}
+    merge_exclude_columns = ["inserted_timestamp"],
+    tags = ['decoded_logs','reorg']
+) }}    
 
 SELECT
     block_number,

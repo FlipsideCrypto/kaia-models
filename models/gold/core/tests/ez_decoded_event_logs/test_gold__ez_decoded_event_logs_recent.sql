@@ -13,7 +13,7 @@ WITH last_3_days AS (
 SELECT
     *
 FROM
-    {{ ref('core__fact_decoded_event_logs') }}
+    {{ ref('core__ez_decoded_event_logs') }}
 WHERE
     block_number >= (
         SELECT

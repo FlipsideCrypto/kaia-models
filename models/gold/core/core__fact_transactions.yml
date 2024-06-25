@@ -44,7 +44,7 @@ models:
         description: The maximum fee per gas of the transaction, in Gwei.
       - name: MAX_PRIORITY_FEE_PER_GAS
         description: The maximum priority fee per gas of the transaction, in Gwei.
-      - name: SUCCEEDED
+      - name: TX_SUCCEEDED
         description: '{{ doc("kaia_tx_status") }}' 
       - name: INPUT_DATA
         description: '{{ doc("kaia_tx_input_data") }}'
