@@ -84,7 +84,7 @@ The position of the transaction within the block.
 
 {% docs kaia_tx_status %}
 
-Status of the transaction. 
+Boolean status of the transaction. True indicates a successful transaction and false indicates a failed transaction.
 
 {% enddocs %}
 

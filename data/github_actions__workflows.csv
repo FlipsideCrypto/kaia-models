@@ -1,3 +1,4 @@
 workflow_name,workflow_schedule
 dbt_run_scheduled_non_realtime,"15,45 * * * *"
+dbt_run_streamline_decoder,"25,55 * * * *"
 dbt_run_scheduled_curated,"30 * * * *"
