@@ -1,18 +1,23 @@
 version: 2
 models:
-  - name: test_gold__decoded_logs_recent
+  - name: test_gold__ez_decoded_event_logs_full
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
-            - FACT_DECODED_EVENT_LOGS_ID
+            - EZ_DECODED_EVENT_LOGS_ID
       - dbt_utils.recency:
           datepart: day
           field: INSERTED_TIMESTAMP
           interval: 1
-      - missing_gold_decoded_logs
     columns:
       - name: BLOCK_TIMESTAMP
         tests:
           - dbt_expectations.expect_row_values_to_have_recent_data:
-              datepart: hour
-              interval: 3
+              datepart: day
+              interval: 1
+           
+
+
+
+
+
