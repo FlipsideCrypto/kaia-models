@@ -1,4 +1,3 @@
--- depends_on: {{ ref('silver__logs') }}
 {{ config (
     materialized = 'view',
     tags = ['recent_test']
