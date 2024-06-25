@@ -1,8 +1,8 @@
--- depends_on: {{ source('klaytn_bronze','decoded_logs') }}
+-- depends_on: {{ ref('bronze__decoded_logs') }}
 {{ config (
     materialized = "incremental",
     unique_key = ['block_number', 'event_index'],
-    cluster_by = "block_timestamp::date",
+    cluster_by = ["modified_timestamp::date","block_timestamp::date"],
     incremental_predicates = ["dynamic_range", "block_number"],
     post_hook = "ALTER TABLE {{ this }} ADD SEARCH OPTIMIZATION",
     merge_exclude_columns = ["inserted_timestamp"],
@@ -32,10 +32,7 @@ WITH base_data AS (
     FROM
 
 {% if is_incremental() %}
-    {{ source(
-        'klaytn_bronze',
-        'decoded_logs'
-    ) }}
+{{ ref('bronze__decoded_logs') }}
 WHERE
     TO_TIMESTAMP_NTZ(_inserted_timestamp) >= (
         SELECT
@@ -45,10 +42,7 @@ WHERE
     )
     AND DATA NOT ILIKE '%Event topic is not present in given ABI%'
 {% else %}
-        {{ source(
-        'klaytn_bronze',
-        'fr_decoded_logs'
-    ) }}
+    {{ ref('bronze__fr_decoded_logs') }}
 WHERE
     DATA NOT ILIKE '%Event topic is not present in given ABI%'
 {% endif %}
