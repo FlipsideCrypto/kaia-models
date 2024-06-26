@@ -6,7 +6,7 @@
 ) }}
 
 SELECT
-    COALESCE(c0.created_contract_address,c1.contract_address) AS address,
+    LOWER(COALESCE(c0.created_contract_address,c1.contract_address)) AS address,
     c1.token_symbol AS symbol,
     c1.token_name AS NAME,
     c1.token_decimals AS decimals,
