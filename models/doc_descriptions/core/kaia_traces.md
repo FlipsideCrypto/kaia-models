@@ -105,7 +105,7 @@ The type of internal transaction. Common trace types are `CALL`, `DELEGATECALL`,
 
 {% docs kaia_traces_value %}
 
-The amount of ETH transferred in this trace.
+The amount of KLAY transferred in this trace.
 
 {% enddocs %}
 

@@ -14,7 +14,7 @@ Block hash is a unique 66-character identifier that is generate when a block is 
 
 {% docs kaia_tx_fee %}
 
-Amount paid to validate the transaction in ETH. 
+Amount paid to validate the transaction in KLAY. 
 
 {% enddocs %}
 
@@ -91,14 +91,14 @@ Boolean status of the transaction. True indicates a successful transaction and f
 
 {% docs kaia_tx_table_doc %}
 
-This table contains transaction level data for the kaia Blockchain. Each transaction will have a unique transaction hash, along with transactions fees and a ETH value transferred when applicable. Transactions may be native ETH transfers or interactions with contract addresses. For more information, please see [The Ethereum Organization - Transactions](https://ethereum.org/en/developers/docs/transactions/)
+This table contains transaction level data for the kaia Blockchain. Each transaction will have a unique transaction hash, along with transactions fees and a KLAY value transferred when applicable. Transactions may be native KLAY transfers or interactions with contract addresses. For more information, please see [The Ethereum Organization - Transactions](https://ethereum.org/en/developers/docs/transactions/)
 
 {% enddocs %}
 
 
 {% docs kaia_value %}
 
-The value transacted in ETH. 
+The value transacted in KLAY. 
 
 {% enddocs %}
 

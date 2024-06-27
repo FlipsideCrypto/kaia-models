@@ -1,6 +1,6 @@
 {% docs kaia_eth_amount %}
 
-ETH value transferred.
+KLAY value transferred.
 
 {% enddocs %}
 
@@ -9,7 +9,7 @@ ETH value transferred.
 
 {% docs kaia_eth_amount_usd %}
 
-ETH value transferred, in USD.
+KLAY value transferred, in USD.
 
 {% enddocs %}
 
@@ -98,7 +98,7 @@ The amount of tokens transferred returned as a string to preserve precision. Thi
 
 {% docs kaia_transfer_table_doc %}
 
-This table contains events on the kaia Blockchain with an event name of 'Transfer'. The contract address is the token transferred, and the raw amount field is the amount of tokens transferred. Please note this amount is not decimal adjusted. This table will not contain transfers of native ETH.
+This table contains events on the kaia Blockchain with an event name of 'Transfer'. The contract address is the token transferred, and the raw amount field is the amount of tokens transferred. Please note this amount is not decimal adjusted. This table will not contain transfers of native KLAY.
 
 {% enddocs %}
 
