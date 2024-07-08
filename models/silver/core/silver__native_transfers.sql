@@ -103,7 +103,7 @@ FROM
         'hour',
         A.block_timestamp
     ) = HOUR
-    AND token_address = '0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270'
+    AND token_address = LOWER('0x19aac5f612f524b754ca7e7c41cbfa2e981a4432')
     JOIN tx_table USING (
         tx_hash,
         block_number
