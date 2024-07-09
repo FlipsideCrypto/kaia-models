@@ -1,6 +1,6 @@
 {% docs kaia_eth_amount %}
 
-ETH value transferred.
+KLAY value transferred.
 
 {% enddocs %}
 
@@ -9,22 +9,7 @@ ETH value transferred.
 
 {% docs kaia_eth_amount_usd %}
 
-ETH value transferred, in USD.
-
-{% enddocs %}
-
-
-
-{% docs kaia_ez_eth_transfers_table_doc %}
-
-This table contains all native ETH transfers, including equivalent USD amounts. The origin addresses correspond to the to and from addresses from the `fact_transactions` table. The `identifier` and `tx_hash` columns relate this table back to `fact_traces`, which contains more details on the transfers.
-
-{% enddocs %}
-
-
-{% docs kaia_ez_transfers_table_doc %}
-
-This table will contain all events in the ```fact_token_transfers table```, along with joined columns such as token price, symbol, and decimals where possible that allow for easier analysis of token transfer events. Please note Native ETH transfers are not included here.
+KLAY value transferred, in USD.
 
 {% enddocs %}
 
@@ -113,7 +98,7 @@ The amount of tokens transferred returned as a string to preserve precision. Thi
 
 {% docs kaia_transfer_table_doc %}
 
-This table contains events on the kaia Blockchain with an event name of 'Transfer'. The contract address is the token transferred, and the raw amount field is the amount of tokens transferred. Please note this amount is not decimal adjusted. This table will not contain transfers of native ETH.
+This table contains events on the kaia Blockchain with an event name of 'Transfer'. The contract address is the token transferred, and the raw amount field is the amount of tokens transferred. Please note this amount is not decimal adjusted. This table will not contain transfers of native KLAY.
 
 {% enddocs %}
 
@@ -139,3 +124,20 @@ Transaction hash is a unique 66-character identifier that is generated when a tr
 {% enddocs %}
 
 
+{% docs evm_fact_token_transfers_table_doc %}
+
+This fact-based table contains emitted event logs for ERC-20 Token Transfers (e.g. `Transfer`: topic_0 = `0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef`). The contract address is the token transferred, and the raw amount field is the amount of tokens transferred. The values in this table are not decimal adjusted, instead please use `core.dim_contracts` or `core.ez_token_transfers` to reference decimals or decimal adjusted values. This table does not contain ERC-721 and ERC-1155 token transfers, instead please use `nft.ez_nft_transfers`. Additionally, this table does not contain transfers of the chain's native asset, instead please use `core.ez_native_transfers`.
+
+{% enddocs %}
+
+{% docs evm_ez_token_transfers_table_doc %}
+
+This convenience table contains emitted event logs for ERC-20 Token Transfers (e.g. `Transfer`: topic_0 = `0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef`), including decimal adjusted values, usd values, and other helpful token metadata where available for each transfer event. The contract address is the token transferred, and the raw amount field is the amount of tokens transferred. Note, this table does not contain ERC-721 and ERC-1155 token transfers, instead please use `nft.ez_nft_transfers`. Additionally, this table does not contain transfers of the chain's native asset, instead please use `core.ez_native_transfers`.
+
+{% enddocs %}
+
+{% docs evm_ez_native_transfers_table_doc %}
+
+This convenience table contains all transfers for the chain's native asset, sourced from internal traces (`core.fact_traces`), and includes decimal adjusted and usd values where available. The origin addresses correspond to the to and from addresses in the `core.fact_transactions` table. Note, this table does not contain ERC-721 and ERC-1155 token transfers, instead please use `nft.ez_nft_transfers`.
+
+{% enddocs %}
