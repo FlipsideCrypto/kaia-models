@@ -29,7 +29,6 @@ WITH logs AS (
     WHERE
         topics [0] :: STRING = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
         AND tx_status = TRUE
-        AND is_pending = false
 
 {% if is_incremental() %}
 AND _inserted_timestamp >= (
