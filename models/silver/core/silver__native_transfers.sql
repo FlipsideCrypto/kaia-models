@@ -4,7 +4,7 @@
     unique_key = 'block_number',
     cluster_by = ['block_timestamp::DATE'],
     post_hook = "ALTER TABLE {{ this }} ADD SEARCH OPTIMIZATION",
-    tags = ['core','non_realtime','reorg']
+    tags = ['non_realtime','reorg']
 ) }}
 
 WITH base AS (
