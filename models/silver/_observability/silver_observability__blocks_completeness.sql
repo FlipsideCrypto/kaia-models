@@ -18,7 +18,7 @@ WITH backfill_filter AS (
     GROUP BY
         1
     HAVING
-        block_count > 86000
+        block_count > 86000 --typical complete day of blocks
     ORDER BY
         1
     LIMIT
