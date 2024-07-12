@@ -4,26 +4,7 @@
     full_refresh = false,
     tags = ['observability']
 ) }}
-WITH backfill_filter AS (
-
-    SELECT
-        DATE_TRUNC(
-            'day',
-            block_timestamp
-        ) as block_timestamp,
-        COUNT(*) AS block_count
-    FROM
-        {{ ref('silver__blocks') }}
-    GROUP BY
-        1
-    HAVING
-        block_count > 86000
-    ORDER BY
-        1
-    LIMIT
-        1
-), 
-summary_stats AS (
+WITH summary_stats AS (
 
     SELECT
         MIN(block_number) AS min_block,
@@ -35,12 +16,6 @@ summary_stats AS (
         {{ ref('silver__blocks') }}
     WHERE
         block_timestamp <= DATEADD('hour', -12, CURRENT_TIMESTAMP())
-        AND block_timestamp >= (
-            SELECT
-                block_timestamp
-            FROM
-                backfill_filter
-        )
 {% if is_incremental() %}
 AND (
     block_number >= (

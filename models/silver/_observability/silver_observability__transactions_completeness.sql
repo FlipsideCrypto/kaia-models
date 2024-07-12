@@ -1,6 +1,7 @@
 {{ config(
     materialized = 'incremental',
     unique_key = 'test_timestamp',
+    enabled = false,
     full_refresh = false,
     tags = ['observability']
 ) }}

@@ -5,26 +5,7 @@
     tags = ['observability']
 ) }}
 
-WITH backfill_filter AS (
-
-    SELECT
-        DATE_TRUNC(
-            'day',
-            block_timestamp
-        ) as block_timestamp,
-        COUNT(*) AS block_count
-    FROM
-        {{ ref('silver__blocks') }}
-    GROUP BY
-        1
-    HAVING
-        block_count > 86000
-    ORDER BY
-        1
-    LIMIT
-        1
-), 
-summary_stats AS (
+WITH summary_stats AS (
     SELECT
         MIN(block_number) AS min_block,
         MAX(block_number) AS max_block,
