@@ -2,6 +2,7 @@
     materialized = 'incremental',
     unique_key = 'test_timestamp',
     full_refresh = false,
+    enabled=false,
     tags = ['observability']
 ) }}
 

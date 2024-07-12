@@ -10,6 +10,7 @@ sources:
       - name: logs
       - name: receipts
       - name: traces
+      - name: confirmed_blocks
       - name: transactions
   - name: github_actions
     database: kaia
@@ -37,3 +38,4 @@ sources:
       {{ "KLAYTN_DEV" if var("STREAMLINE_USE_DEV_FOR_EXTERNAL_TABLES", False) else "KLAYTN" }}
     tables:
       - name: decoded_logs
+
