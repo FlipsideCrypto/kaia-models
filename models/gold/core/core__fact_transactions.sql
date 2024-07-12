@@ -3,6 +3,7 @@
     unique_key = "block_number",
     incremental_strategy = 'delete+insert',
     cluster_by = "block_timestamp::date",
+    post_hook = "ALTER TABLE {{ this }} ADD SEARCH OPTIMIZATION",
     tags = ['non_realtime']
 ) }}
 
