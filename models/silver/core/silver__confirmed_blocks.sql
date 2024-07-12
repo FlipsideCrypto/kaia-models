@@ -5,8 +5,7 @@
 SELECT
     *
 FROM
-    klaytn_dev.silver.confirmed_blocks
-    {# {{ source(
+    {{ source(
         'klaytn_silver',
         'confirmed_blocks'
-    ) }} #}
+    ) }}
