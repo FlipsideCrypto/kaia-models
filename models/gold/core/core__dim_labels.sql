@@ -3,7 +3,7 @@
     unique_key = ['address', 'blockchain'],
     incremental_strategy = 'merge',
     cluster_by = 'modified_timestamp::DATE',
-    post_hook = "ALTER TABLE {{ this }} ADD SEARCH OPTIMIZATION ON EQUALITY(address, creator, label_type, label_subtype, address_name, project_name), SUBSTRING(address, creator, label_type, label_subtype, address_name, project_name)",
+    post_hook = "ALTER TABLE {{ this }} ADD SEARCH OPTIMIZATION ON EQUALITY(address, label_type, label_subtype, address_name, project_name), SUBSTRING(address, label_type, label_subtype, address_name, project_name)",
     tags = ['non_realtime']
 ) }}
 
