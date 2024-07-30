@@ -174,7 +174,8 @@ missing_data AS (
     WHERE
         t.is_pending
         AND l.block_timestamp IS NOT NULL
-)
+), 
+complete_data as (
 {% endif %}
 SELECT
     tx_hash,
@@ -236,3 +237,10 @@ SELECT
 FROM
     missing_data
 {% endif %}
+)
+SELECT
+    *
+FROM
+    complete_data qualify(ROW_NUMBER() over (PARTITION BY block_number, event_index
+ORDER BY
+    _inserted_timestamp DESC, is_pending ASC)) = 1
