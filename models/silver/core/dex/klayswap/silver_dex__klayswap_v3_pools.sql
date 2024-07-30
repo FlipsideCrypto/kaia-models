@@ -33,7 +33,7 @@ WITH created_pools AS (
         {{ ref('silver__logs') }}
     WHERE
         topics [0] = '0x20a108faf9dc51ca2b459a109d08568e65a9cb87569b6b3a334c275d504ff94f'
-        AND contract_address = '0xa15be7e90df29a4aead0c7fc86f7a9fbe6502ac9'
+        AND contract_address = '0x0af25138860689f967f142f4b06c29afc84ae910'
 
 {% if is_incremental() %}
 AND _inserted_timestamp >= (

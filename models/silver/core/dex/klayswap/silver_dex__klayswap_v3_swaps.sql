@@ -66,7 +66,7 @@ pool_data AS (
         token1_decimals,
         pool_name
     FROM
-        {{ ref('silver_dex__klayswapv3_pools') }}
+        {{ ref('silver_dex__klayswap_v3_pools') }}
 ),
 silver_swaps AS (
     SELECT
