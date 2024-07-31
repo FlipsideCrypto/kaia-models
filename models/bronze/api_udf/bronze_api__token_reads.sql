@@ -82,9 +82,17 @@ node_call AS (
         *,
         {{ target.database }}.live.udf_api(
             'POST',
-            '{Service}',{},
+            CONCAT(
+                '{Service}',
+                '/klaytn?apikey=',
+                '{Authentication}'
+            ),
+            OBJECT_CONSTRUCT(
+                'Content-Type',
+                'application/json'
+            ),
             batch_rpc_request,
-            'Vault/prod/klaytn/blockjoy/mainnet'
+            'Vault/prod/node_providers/ankr'
         ) AS response
     FROM
         batch_reads
