@@ -82,9 +82,12 @@ node_call AS (
         *,
         {{ target.database }}.live.udf_api(
             'POST',
-            '{Service}',{},
-            batch_rpc_request,
-            'Vault/prod/klaytn/blockjoy/mainnet'
+            'https://archive-en.cypress.klaytn.net',
+            OBJECT_CONSTRUCT(
+                'Content-Type',
+                'application/json'
+            ),
+            batch_rpc_request
         ) AS response
     FROM
         batch_reads
