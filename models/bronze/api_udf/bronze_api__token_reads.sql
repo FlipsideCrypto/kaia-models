@@ -82,17 +82,12 @@ node_call AS (
         *,
         {{ target.database }}.live.udf_api(
             'POST',
-            CONCAT(
-                '{Service}',
-                '/klaytn?apikey=',
-                '{Authentication}'
-            ),
+            'https://archive-en.cypress.klaytn.net',
             OBJECT_CONSTRUCT(
                 'Content-Type',
                 'application/json'
             ),
-            batch_rpc_request,
-            'Vault/prod/node_providers/ankr'
+            batch_rpc_request
         ) AS response
     FROM
         batch_reads
