@@ -21,35 +21,26 @@ swaps_base AS (
         origin_function_signature,
         origin_from_address,
         origin_to_address,
+        topics,
         block_timestamp,
         tx_hash,
         event_index,
         contract_address,
         regexp_substr_all(SUBSTR(DATA, 3, len(DATA)), '.{64}') AS segmented_data,
-        TRY_TO_NUMBER(
-            utils.udf_hex_to_int(
-                segmented_data [0] :: STRING
-            ) :: INTEGER
-        ) AS amount0In,
+        CONCAT('0x', SUBSTR(segmented_data [0] :: STRING, 25, 40)) AS token_out,
         TRY_TO_NUMBER(
             utils.udf_hex_to_int(
                 segmented_data [1] :: STRING
-            ) :: INTEGER
-        ) AS amount1In,
-        TRY_TO_NUMBER(
-            utils.udf_hex_to_int(
-                segmented_data [2] :: STRING
-            ) :: INTEGER
-        ) AS amount0Out,
+            )
+        ) AS amount_out,
+        CONCAT('0x', SUBSTR(segmented_data [2] :: STRING, 25, 40)) AS token_in,
         TRY_TO_NUMBER(
             utils.udf_hex_to_int(
                 segmented_data [3] :: STRING
-            ) :: INTEGER
-        ) AS amount1Out,
-        CONCAT('0x', SUBSTR(topics [1] :: STRING, 27, 40)) AS sender,
-        CONCAT('0x', SUBSTR(topics [2] :: STRING, 27, 40)) AS tx_to,
-        token0,
-        token1,
+            )
+        ) AS amount_in,
+        origin_from_address AS sender,
+        origin_to_address AS tx_to,
         _log_id,
         _inserted_timestamp
     FROM
@@ -80,36 +71,12 @@ SELECT
     contract_address,
     sender,
     tx_to,
-    amount0In,
-    amount1In,
-    amount0Out,
-    amount1Out,
-    token0,
-    token1,
-    CASE
-        WHEN amount0In <> 0
-        AND amount1In <> 0
-        AND amount0Out <> 0 THEN amount1In
-        WHEN amount0In <> 0 THEN amount0In
-        WHEN amount1In <> 0 THEN amount1In
-    END AS amount_in_unadj,
-    CASE
-        WHEN amount0Out <> 0 THEN amount0Out
-        WHEN amount1Out <> 0 THEN amount1Out
-    END AS amount_out_unadj,
-    CASE
-        WHEN amount0In <> 0
-        AND amount1In <> 0
-        AND amount0Out <> 0 THEN token1
-        WHEN amount0In <> 0 THEN token0
-        WHEN amount1In <> 0 THEN token1
-    END AS token_in,
-    CASE
-        WHEN amount0Out <> 0 THEN token0
-        WHEN amount1Out <> 0 THEN token1
-    END AS token_out,
+    token_out,
+    token_in,
+    amount_in AS amount_in_unadj,
+    amount_out AS amount_out_unadj,
     'Swap' AS event_name,
-    'uniswap-v2' AS platform,
+    'klayswap-v2' AS platform,
     _log_id,
     _inserted_timestamp
 FROM
