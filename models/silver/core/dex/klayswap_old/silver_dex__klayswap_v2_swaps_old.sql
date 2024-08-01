@@ -1,7 +1,7 @@
 {{ config(
     materialized = 'incremental',
     incremental_strategy = 'delete+insert',
-    unique_key = 'block_number',
+    unique_key = "block_number",
     cluster_by = ['block_timestamp::DATE'],
     tags = ['curated','reorg']
 ) }}
@@ -26,30 +26,20 @@ swaps_base AS (
         event_index,
         contract_address,
         regexp_substr_all(SUBSTR(DATA, 3, len(DATA)), '.{64}') AS segmented_data,
-        TRY_TO_NUMBER(
-            utils.udf_hex_to_int(
-                segmented_data [0] :: STRING
-            ) :: INTEGER
-        ) AS amount0In,
+        CONCAT('0x', SUBSTR(segmented_data [0] :: STRING, 25, 40)) AS token0,
         TRY_TO_NUMBER(
             utils.udf_hex_to_int(
                 segmented_data [1] :: STRING
-            ) :: INTEGER
-        ) AS amount1In,
-        TRY_TO_NUMBER(
-            utils.udf_hex_to_int(
-                segmented_data [2] :: STRING
-            ) :: INTEGER
-        ) AS amount0Out,
+            )
+        ) AS amount0,
+        CONCAT('0x', SUBSTR(segmented_data [2] :: STRING, 25, 40)) AS token1,
         TRY_TO_NUMBER(
             utils.udf_hex_to_int(
                 segmented_data [3] :: STRING
-            ) :: INTEGER
-        ) AS amount1Out,
-        CONCAT('0x', SUBSTR(topics [1] :: STRING, 27, 40)) AS sender,
-        CONCAT('0x', SUBSTR(topics [2] :: STRING, 27, 40)) AS tx_to,
-        token0,
-        token1,
+            )
+        ) AS amount1,
+        origin_from_address AS sender,
+        origin_to_address AS tx_to,
         _log_id,
         _inserted_timestamp
     FROM
@@ -58,7 +48,7 @@ swaps_base AS (
         ON p.pool_address = contract_address
     WHERE
         topics [0] :: STRING = '0x022d176d604c15661a2acf52f28fd69bdd2c755884c08a67132ffeb8098330e0'
-        AND tx_status
+        AND tx_status = 'SUCCESS'
 
 {% if is_incremental() %}
 AND _inserted_timestamp >= (
@@ -85,34 +75,12 @@ SELECT
     amount0Out,
     amount1Out,
     token0,
+    amount0 AS amount_in_unadj,
     token1,
-    CASE
-        WHEN amount0In <> 0
-        AND amount1In <> 0
-        AND amount0Out <> 0 THEN amount1In
-        WHEN amount0In <> 0 THEN amount0In
-        WHEN amount1In <> 0 THEN amount1In
-    END AS amount_in_unadj,
-    CASE
-        WHEN amount0Out <> 0 THEN amount0Out
-        WHEN amount1Out <> 0 THEN amount1Out
-    END AS amount_out_unadj,
-    CASE
-        WHEN amount0In <> 0
-        AND amount1In <> 0
-        AND amount0Out <> 0 THEN token1
-        WHEN amount0In <> 0 THEN token0
-        WHEN amount1In <> 0 THEN token1
-    END AS token_in,
-    CASE
-        WHEN amount0Out <> 0 THEN token0
-        WHEN amount1Out <> 0 THEN token1
-    END AS token_out,
+    amount1 AS amount_out_unadj,
     'Swap' AS event_name,
-    'uniswap-v2' AS platform,
+    'klayswap-v2' AS platform,
     _log_id,
     _inserted_timestamp
 FROM
     swaps_base
-WHERE
-    token_in <> token_out
