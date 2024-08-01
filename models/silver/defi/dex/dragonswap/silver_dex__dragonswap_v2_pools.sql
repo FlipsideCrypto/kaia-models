@@ -25,7 +25,7 @@ WITH pool_creation AS (
     FROM
         {{ ref ('silver__logs') }}
     WHERE
-        contract_address = '0x1a1f14ec33bf8c2e66731f46d0a706e8025b43e9'
+        contract_address = lower('0x224302153096E3ba16c4423d9Ba102D365a94B2B')
         AND topics [0] :: STRING = '0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9' --PairCreated
         AND tx_status
 
