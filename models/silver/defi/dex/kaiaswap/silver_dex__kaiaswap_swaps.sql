@@ -27,18 +27,29 @@ swaps_base AS (
         event_index,
         contract_address,
         regexp_substr_all(SUBSTR(DATA, 3, len(DATA)), '.{64}') AS segmented_data,
-        CONCAT('0x', SUBSTR(segmented_data [0] :: STRING, 25, 40)) AS token_out,
+        CONCAT('0x', SUBSTR(topics [1] :: STRING, 27, 40)) AS token_in,
+        CONCAT('0x', SUBSTR(topics [2] :: STRING, 27, 40)) AS token_out,
         TRY_TO_NUMBER(
             utils.udf_hex_to_int(
                 segmented_data [1] :: STRING
             )
-        ) AS amount_out,
-        CONCAT('0x', SUBSTR(segmented_data [2] :: STRING, 25, 40)) AS token_in,
+        ) AS amount_in,
         TRY_TO_NUMBER(
             utils.udf_hex_to_int(
+                topics [3] :: STRING
+            )
+        ) AS fee,
+        TRY_TO_NUMBER(
+            utils.udf_hex_to_int(
+                segmented_data [2] :: STRING
+            )
+        ) AS amount_out,
+        TRY_TO_NUMBER(
+            utils.udf_hex_to_int(
+                's2c',
                 segmented_data [3] :: STRING
             )
-        ) AS amount_in,
+        ) AS not_sure,
         origin_from_address AS sender,
         origin_to_address AS tx_to,
         _log_id,
@@ -48,7 +59,7 @@ swaps_base AS (
         INNER JOIN pools p
         ON p.pool_address = contract_address
     WHERE
-        topics [0] :: STRING = '0x022d176d604c15661a2acf52f28fd69bdd2c755884c08a67132ffeb8098330e0'
+        topics [0] :: STRING = '0x0fe977d619f8172f7fdbe8bb8928ef80952817d96936509f67d66346bc4cd10f'
         AND tx_status
 
 {% if is_incremental() %}
