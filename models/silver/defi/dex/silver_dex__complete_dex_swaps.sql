@@ -1,4 +1,4 @@
-{# -- depends_on: {{ ref('silver__complete_token_prices') }}
+-- depends_on: {{ ref('silver__complete_token_prices') }}
 {{ config(
   materialized = 'incremental',
   incremental_strategy = 'delete+insert',
@@ -9,7 +9,7 @@
   tags = ['curated','reorg','heal']
 ) }}
 
-WITH univ2 AS (
+WITH dragonswap_v2 AS (
 
   SELECT
     block_number,
@@ -32,9 +32,9 @@ WITH univ2 AS (
     _log_id,
     _inserted_timestamp
   FROM
-    {{ ref('silver_dex__univ2_swaps') }}
+    {{ ref('silver_dex__dragonswap_v2_swaps') }}
 
-{% if is_incremental() and 'univ2' not in var('HEAL_MODELS') %}
+{% if is_incremental() and 'dragonswap_v2' not in var('HEAL_MODELS') %}
 WHERE
   _inserted_timestamp >= (
     SELECT
@@ -44,7 +44,7 @@ WHERE
   )
 {% endif %}
 ),
-alienbase AS (
+kaiaswap AS (
   SELECT
     block_number,
     block_timestamp,
@@ -66,9 +66,9 @@ alienbase AS (
     _log_id,
     _inserted_timestamp
   FROM
-    {{ ref('silver_dex__alienbase_swaps') }}
+    {{ ref('silver_dex__kaiaswap_swaps') }}
 
-{% if is_incremental() and 'alienbase' not in var('HEAL_MODELS') %}
+{% if is_incremental() and 'kaiaswap' not in var('HEAL_MODELS') %}
 WHERE
   _inserted_timestamp >= (
     SELECT
@@ -78,7 +78,7 @@ WHERE
   )
 {% endif %}
 ),
-maverick AS (
+klayswap_v2 AS (
   SELECT
     block_number,
     block_timestamp,
@@ -100,9 +100,9 @@ maverick AS (
     _log_id,
     _inserted_timestamp
   FROM
-    {{ ref('silver_dex__maverick_swaps') }}
+    {{ ref('silver_dex__klayswap_v2_swaps') }}
 
-{% if is_incremental() and 'maverick' not in var('HEAL_MODELS') %}
+{% if is_incremental() and 'klayswap_v2' not in var('HEAL_MODELS') %}
 WHERE
   _inserted_timestamp >= (
     SELECT
@@ -112,7 +112,7 @@ WHERE
   )
 {% endif %}
 ),
-woofi AS (
+neopin AS (
   SELECT
     block_number,
     block_timestamp,
@@ -134,9 +134,9 @@ woofi AS (
     _log_id,
     _inserted_timestamp
   FROM
-    {{ ref('silver_dex__woofi_swaps') }}
+    {{ ref('silver_dex__neopin_swaps') }}
 
-{% if is_incremental() and 'woofi' not in var('HEAL_MODELS') %}
+{% if is_incremental() and 'neopin' not in var('HEAL_MODELS') %}
 WHERE
   _inserted_timestamp >= (
     SELECT
@@ -146,211 +146,7 @@ WHERE
   )
 {% endif %}
 ),
-balancer AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    origin_function_signature,
-    origin_from_address,
-    origin_to_address,
-    contract_address,
-    event_name,
-    amount_in_unadj,
-    amount_out_unadj,
-    token_in,
-    token_out,
-    sender,
-    tx_to,
-    event_index,
-    platform,
-    'v1' AS version,
-    _log_id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__balancer_swaps') }}
-
-{% if is_incremental() and 'balancer' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-baseswap AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    origin_function_signature,
-    origin_from_address,
-    origin_to_address,
-    contract_address,
-    event_name,
-    amount_in_unadj,
-    amount_out_unadj,
-    token_in,
-    token_out,
-    sender,
-    tx_to,
-    event_index,
-    platform,
-    'v1' AS version,
-    _log_id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__baseswap_swaps') }}
-
-{% if is_incremental() and 'baseswap' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-swapbased AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    origin_function_signature,
-    origin_from_address,
-    origin_to_address,
-    contract_address,
-    event_name,
-    amount_in_unadj,
-    amount_out_unadj,
-    token_in,
-    token_out,
-    sender,
-    tx_to,
-    event_index,
-    platform,
-    'v1' AS version,
-    _log_id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__swapbased_swaps') }}
-
-{% if is_incremental() and 'swapbased' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-aerodrome AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    origin_function_signature,
-    origin_from_address,
-    origin_to_address,
-    contract_address,
-    event_name,
-    amount_in_unadj,
-    amount_out_unadj,
-    token_in,
-    token_out,
-    sender,
-    tx_to,
-    event_index,
-    platform,
-    'v1' AS version,
-    _log_id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__aerodrome_swaps') }}
-
-{% if is_incremental() and 'aerodrome' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-voodoo AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    origin_function_signature,
-    origin_from_address,
-    origin_to_address,
-    contract_address,
-    event_name,
-    amount_in_unadj,
-    amount_out_unadj,
-    token_in,
-    token_out,
-    sender,
-    tx_to,
-    event_index,
-    platform,
-    'v1' AS version,
-    _log_id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__voodoo_swaps') }}
-
-{% if is_incremental() and 'voodoo' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-curve AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    origin_function_signature,
-    origin_from_address,
-    origin_to_address,
-    contract_address,
-    event_name,
-    tokens_sold AS amount_in_unadj,
-    tokens_bought AS amount_out_unadj,
-    token_in,
-    token_out,
-    sender,
-    tx_to,
-    event_index,
-    platform,
-    'v1' AS version,
-    _log_id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__curve_swaps') }}
-
-{% if is_incremental() and 'curve' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-sushi AS (
+dragonswap_v3 AS (
   SELECT
     block_number,
     block_timestamp,
@@ -379,106 +175,60 @@ sushi AS (
     sender,
     recipient AS tx_to,
     event_index,
-    'sushiswap' AS platform,
-    'v1' AS version,
-    _log_id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__sushi_swaps') }}
-
-{% if is_incremental() and 'sushi' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-dackie AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    origin_function_signature,
-    origin_from_address,
-    origin_to_address,
-    pool_address AS contract_address,
-    'Swap' AS event_name,
-    CASE
-      WHEN amount0_unadj > 0 THEN ABS(amount0_unadj)
-      ELSE ABS(amount1_unadj)
-    END AS amount_in_unadj,
-    CASE
-      WHEN amount0_unadj < 0 THEN ABS(amount0_unadj)
-      ELSE ABS(amount1_unadj)
-    END AS amount_out_unadj,
-    CASE
-      WHEN amount0_unadj > 0 THEN token0_address
-      ELSE token1_address
-    END AS token_in,
-    CASE
-      WHEN amount0_unadj < 0 THEN token0_address
-      ELSE token1_address
-    END AS token_out,
-    sender,
-    recipient AS tx_to,
-    event_index,
-    'dackieswap' AS platform,
-    'v1' AS version,
-    _log_id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__dackie_swaps') }}
-
-{% if is_incremental() and 'dackie' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-univ3 AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    origin_function_signature,
-    origin_from_address,
-    origin_to_address,
-    pool_address AS contract_address,
-    'Swap' AS event_name,
-    CASE
-      WHEN amount0_unadj > 0 THEN ABS(amount0_unadj)
-      ELSE ABS(amount1_unadj)
-    END AS amount_in_unadj,
-    CASE
-      WHEN amount0_unadj < 0 THEN ABS(amount0_unadj)
-      ELSE ABS(amount1_unadj)
-    END AS amount_out_unadj,
-    CASE
-      WHEN amount0_unadj > 0 THEN token0_address
-      ELSE token1_address
-    END AS token_in,
-    CASE
-      WHEN amount0_unadj < 0 THEN token0_address
-      ELSE token1_address
-    END AS token_out,
-    sender,
-    recipient AS tx_to,
-    event_index,
-    'uniswap-v3' AS platform,
+    'dragonswap-v3' AS platform,
     'v3' AS version,
     _log_id,
     _inserted_timestamp
   FROM
-    {{ ref('silver_dex__univ3_swaps') }}
+    {{ ref('silver_dex__dragonswap_v3_swaps') }}
 
-{% if is_incremental() and 'univ3' not in var('HEAL_MODELS') %}
+{% if is_incremental() and 'dragonswap_v3' not in var('HEAL_MODELS') %}
+WHERE
+  _inserted_timestamp >= (
+    SELECT
+      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
+    FROM
+      {{ this }}
+  )
+{% endif %}
+),
+klayswap_v3 AS (
+  SELECT
+    block_number,
+    block_timestamp,
+    tx_hash,
+    origin_function_signature,
+    origin_from_address,
+    origin_to_address,
+    pool_address AS contract_address,
+    'Swap' AS event_name,
+    CASE
+      WHEN amount0_unadj > 0 THEN ABS(amount0_unadj)
+      ELSE ABS(amount1_unadj)
+    END AS amount_in_unadj,
+    CASE
+      WHEN amount0_unadj < 0 THEN ABS(amount0_unadj)
+      ELSE ABS(amount1_unadj)
+    END AS amount_out_unadj,
+    CASE
+      WHEN amount0_unadj > 0 THEN token0_address
+      ELSE token1_address
+    END AS token_in,
+    CASE
+      WHEN amount0_unadj < 0 THEN token0_address
+      ELSE token1_address
+    END AS token_out,
+    sender,
+    recipient AS tx_to,
+    event_index,
+    'klayswap-v3' AS platform,
+    'v3' AS version,
+    _log_id,
+    _inserted_timestamp
+  FROM
+    {{ ref('silver_dex__klayswap_v3_swaps') }}
+
+{% if is_incremental() and 'klayswap_v3' not in var('HEAL_MODELS') %}
 WHERE
   _inserted_timestamp >= (
     SELECT
@@ -492,67 +242,32 @@ all_dex AS (
   SELECT
     *
   FROM
-    swapbased
+    dragonswap_v2
   UNION ALL
   SELECT
     *
   FROM
-    univ2
+    kaiaswap
   UNION ALL
   SELECT
     *
   FROM
-    alienbase
+    klayswap_v2
   UNION ALL
   SELECT
     *
   FROM
-    aerodrome
+    neopin
   UNION ALL
   SELECT
     *
   FROM
-    baseswap
+    dragonswap_v3
   UNION ALL
   SELECT
     *
   FROM
-    woofi
-  UNION ALL
-  SELECT
-    *
-  FROM
-    maverick
-  UNION ALL
-  SELECT
-    *
-  FROM
-    balancer
-  UNION ALL
-  SELECT
-    *
-  FROM
-    voodoo
-  UNION ALL
-  SELECT
-    *
-  FROM
-    curve
-  UNION ALL
-  SELECT
-    *
-  FROM
-    univ3
-  UNION ALL
-  SELECT
-    *
-  FROM
-    sushi
-  UNION ALL
-  SELECT
-    *
-  FROM
-    dackie
+    klayswap_v3
 ),
 complete_dex_swaps AS (
   SELECT
@@ -1001,4 +716,4 @@ SELECT
 FROM
   FINAL qualify (ROW_NUMBER() over (PARTITION BY _log_id
 ORDER BY
-  _inserted_timestamp DESC)) = 1 #}
+  _inserted_timestamp DESC)) = 1

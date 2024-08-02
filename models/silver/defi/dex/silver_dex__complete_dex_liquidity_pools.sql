@@ -1,4 +1,4 @@
-{# {{ config(
+{{ config(
   materialized = 'incremental',
   incremental_strategy = 'delete+insert',
   enable=false,
@@ -18,101 +18,32 @@ WITH contracts AS (
   FROM
     {{ ref('silver__contracts') }}
 ),
-curve AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    deployer_address AS contract_address,
-    pool_address,
-    pool_name,
-    NULL AS fee,
-    NULL AS tick_spacing,
-    MAX(
-      CASE
-        WHEN token_num = 1 THEN token_address
-      END
-    ) AS token0,
-    MAX(
-      CASE
-        WHEN token_num = 2 THEN token_address
-      END
-    ) AS token1,
-    MAX(
-      CASE
-        WHEN token_num = 3 THEN token_address
-      END
-    ) AS token2,
-    MAX(
-      CASE
-        WHEN token_num = 4 THEN token_address
-      END
-    ) AS token3,
-    MAX(
-      CASE
-        WHEN token_num = 5 THEN token_address
-      END
-    ) AS token4,
-    MAX(
-      CASE
-        WHEN token_num = 6 THEN token_address
-      END
-    ) AS token5,
-    MAX(
-      CASE
-        WHEN token_num = 7 THEN token_address
-      END
-    ) AS token6,
-    MAX(
-      CASE
-        WHEN token_num = 8 THEN token_address
-      END
-    ) AS token7,
-    'curve' AS platform,
-    'v1' AS version,
-    _call_id AS _id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__curve_pools') }}
-
-{% if is_incremental() and 'curve' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-GROUP BY
-  ALL
-),
-balancer AS (
+klayswap_v2 AS (
   SELECT
     block_number,
     block_timestamp,
     tx_hash,
     contract_address,
     pool_address,
-    pool_name,
+    NULL AS pool_name,
     NULL AS fee,
     NULL AS tick_spacing,
     token0,
     token1,
-    token2,
-    token3,
-    token4,
-    token5,
-    token6,
-    token7,
-    'balancer' AS platform,
-    'v1' AS version,
+    NULL AS token2,
+    NULL AS token3,
+    NULL AS token4,
+    NULL AS token5,
+    NULL AS token6,
+    NULL AS token7,
+    'klayswap-v2' AS platform,
+    'v2' AS version,
     _log_id AS _id,
     _inserted_timestamp
   FROM
-    {{ ref('silver_dex__balancer_pools') }}
+    {{ ref('silver_dex__klayswap_v2_pools') }}
 
-{% if is_incremental() and 'balancer' not in var('HEAL_MODELS') %}
+{% if is_incremental() and 'klayswap_v2' not in var('HEAL_MODELS') %}
 WHERE
   _inserted_timestamp >= (
     SELECT
@@ -122,7 +53,7 @@ WHERE
   )
 {% endif %}
 ),
-dackieswap AS (
+klayswap_v3 AS (
   SELECT
     block_number,
     block_timestamp,
@@ -140,84 +71,14 @@ dackieswap AS (
     NULL AS token5,
     NULL AS token6,
     NULL AS token7,
-    'dackieswap' AS platform,
-    'v1' AS version,
-    _id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__dackie_pools') }}
-
-{% if is_incremental() and 'dackieswap' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-sushi AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    contract_address,
-    pool_address,
-    NULL AS pool_name,
-    fee,
-    tick_spacing,
-    token0_address AS token0,
-    token1_address AS token1,
-    NULL AS token2,
-    NULL AS token3,
-    NULL AS token4,
-    NULL AS token5,
-    NULL AS token6,
-    NULL AS token7,
-    'sushiswap' AS platform,
-    'v1' AS version,
-    _id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__sushi_pools') }}
-
-{% if is_incremental() and 'sushi' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-univ3 AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    contract_address,
-    pool_address,
-    NULL AS pool_name,
-    fee,
-    tick_spacing,
-    token0_address AS token0,
-    token1_address AS token1,
-    NULL AS token2,
-    NULL AS token3,
-    NULL AS token4,
-    NULL AS token5,
-    NULL AS token6,
-    NULL AS token7,
-    'uniswap-v3' AS platform,
+    'klayswap-v3' AS platform,
     'v3' AS version,
     _id,
     _inserted_timestamp
   FROM
-    {{ ref('silver_dex__univ3_pools') }}
+    {{ ref('silver_dex__klayswap_v3_pools') }}
 
-{% if is_incremental() and 'univ3' not in var('HEAL_MODELS') %}
+{% if is_incremental() and 'klayswap_v3' not in var('HEAL_MODELS') %}
 WHERE
   _inserted_timestamp >= (
     SELECT
@@ -227,7 +88,42 @@ WHERE
   )
 {% endif %}
 ),
-univ2 AS (
+dragonswap_v3 AS (
+  SELECT
+    block_number,
+    block_timestamp,
+    tx_hash,
+    contract_address,
+    pool_address,
+    NULL AS pool_name,
+    fee,
+    tick_spacing,
+    token0_address AS token0,
+    token1_address AS token1,
+    NULL AS token2,
+    NULL AS token3,
+    NULL AS token4,
+    NULL AS token5,
+    NULL AS token6,
+    NULL AS token7,
+    'dragonswap-v3' AS platform,
+    'v3' AS version,
+    _id,
+    _inserted_timestamp
+  FROM
+    {{ ref('silver_dex__dragonswap_v3_pools') }}
+
+{% if is_incremental() and 'dragonswap_v3' not in var('HEAL_MODELS') %}
+WHERE
+  _inserted_timestamp >= (
+    SELECT
+      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
+    FROM
+      {{ this }}
+  )
+{% endif %}
+),
+kaiaswap AS (
   SELECT
     block_number,
     block_timestamp,
@@ -245,14 +141,49 @@ univ2 AS (
     NULL AS token5,
     NULL AS token6,
     NULL AS token7,
-    'uniswap-v2' AS platform,
+    'kaiaswap' AS platform,
+    'v1' AS version,
+    _log_id AS _id,
+    _inserted_timestamp
+  FROM
+    {{ ref('silver_dex__kaiaswap_pools') }}
+
+{% if is_incremental() and 'kaiaswap' not in var('HEAL_MODELS') %}
+WHERE
+  _inserted_timestamp >= (
+    SELECT
+      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
+    FROM
+      {{ this }}
+  )
+{% endif %}
+),
+dragonswap_v2 AS (
+  SELECT
+    block_number,
+    block_timestamp,
+    tx_hash,
+    contract_address,
+    pool_address,
+    NULL AS pool_name,
+    NULL AS fee,
+    NULL AS tick_spacing,
+    token0,
+    token1,
+    NULL AS token2,
+    NULL AS token3,
+    NULL AS token4,
+    NULL AS token5,
+    NULL AS token6,
+    NULL AS token7,
+    'dragonswap-v2' AS platform,
     'v2' AS version,
     _log_id AS _id,
     _inserted_timestamp
   FROM
-    {{ ref('silver_dex__univ2_pools') }}
+    {{ ref('silver_dex__dragonswap_v2_pools') }}
 
-{% if is_incremental() and 'univ2' not in var('HEAL_MODELS') %}
+{% if is_incremental() and 'dragonswap_v2' not in var('HEAL_MODELS') %}
 WHERE
   _inserted_timestamp >= (
     SELECT
@@ -262,7 +193,7 @@ WHERE
   )
 {% endif %}
 ),
-alienbase AS (
+neopin AS (
   SELECT
     block_number,
     block_timestamp,
@@ -280,154 +211,14 @@ alienbase AS (
     NULL AS token5,
     NULL AS token6,
     NULL AS token7,
-    'alienbase' AS platform,
-    'v2' AS version,
-    _log_id AS _id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__alienbase_pools') }}
-
-{% if is_incremental() and 'alienbase' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-maverick AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    contract_address,
-    pool_address,
-    NULL AS pool_name,
-    NULL AS fee,
-    NULL AS tick_spacing,
-    tokenA AS token0,
-    tokenB AS token1,
-    NULL AS token2,
-    NULL AS token3,
-    NULL AS token4,
-    NULL AS token5,
-    NULL AS token6,
-    NULL AS token7,
-    'maverick' AS platform,
+    'neopin' AS platform,
     'v1' AS version,
     _log_id AS _id,
     _inserted_timestamp
   FROM
-    {{ ref('silver_dex__maverick_pools') }}
+    {{ ref('silver_dex__neopin_pools') }}
 
-{% if is_incremental() and 'maverick' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-swapbased AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    contract_address,
-    pool_address,
-    NULL AS pool_name,
-    NULL AS fee,
-    NULL AS tick_spacing,
-    token0,
-    token1,
-    NULL AS token2,
-    NULL AS token3,
-    NULL AS token4,
-    NULL AS token5,
-    NULL AS token6,
-    NULL AS token7,
-    'swapbased' AS platform,
-    'v1' AS version,
-    _log_id AS _id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__swapbased_pools') }}
-
-{% if is_incremental() and 'swapbased' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-aerodrome AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    contract_address,
-    pool_address,
-    NULL AS pool_name,
-    NULL AS fee,
-    NULL AS tick_spacing,
-    token0,
-    token1,
-    NULL AS token2,
-    NULL AS token3,
-    NULL AS token4,
-    NULL AS token5,
-    NULL AS token6,
-    NULL AS token7,
-    'aerodrome' AS platform,
-    'v1' AS version,
-    _log_id AS _id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__aerodrome_pools') }}
-
-{% if is_incremental() and 'aerodrome' not in var('HEAL_MODELS') %}
-WHERE
-  _inserted_timestamp >= (
-    SELECT
-      MAX(_inserted_timestamp) - INTERVAL '{{ var("LOOKBACK", "4 hours") }}'
-    FROM
-      {{ this }}
-  )
-{% endif %}
-),
-baseswap AS (
-  SELECT
-    block_number,
-    block_timestamp,
-    tx_hash,
-    contract_address,
-    pool_address,
-    NULL AS pool_name,
-    NULL AS fee,
-    NULL AS tick_spacing,
-    token0,
-    token1,
-    NULL AS token2,
-    NULL AS token3,
-    NULL AS token4,
-    NULL AS token5,
-    NULL AS token6,
-    NULL AS token7,
-    'baseswap' AS platform,
-    'v1' AS version,
-    _log_id AS _id,
-    _inserted_timestamp
-  FROM
-    {{ ref('silver_dex__baseswap_pools') }}
-
-{% if is_incremental() and 'baseswap' not in var('HEAL_MODELS') %}
+{% if is_incremental() and 'neopin' not in var('HEAL_MODELS') %}
 WHERE
   _inserted_timestamp >= (
     SELECT
@@ -441,57 +232,32 @@ all_pools AS (
   SELECT
     *
   FROM
-    baseswap
+    dragonswap_v2
   UNION ALL
   SELECT
     *
   FROM
-    swapbased
+    dragonswap_v3
   UNION ALL
   SELECT
     *
   FROM
-    univ2
+    kaiaswap
   UNION ALL
   SELECT
     *
   FROM
-    alienbase
+    klayswap_v2
   UNION ALL
   SELECT
     *
   FROM
-    maverick
+    klayswap_v3
   UNION ALL
   SELECT
     *
   FROM
-    aerodrome
-  UNION ALL
-  SELECT
-    *
-  FROM
-    univ3
-  UNION ALL
-  SELECT
-    *
-  FROM
-    sushi
-  UNION ALL
-  SELECT
-    *
-  FROM
-    dackieswap
-  UNION ALL
-  SELECT
-    *
-  FROM
-    balancer
-  UNION ALL
-  SELECT
-    *
-  FROM
-    curve
+    neopin
 ),
 complete_lps AS (
   SELECT
@@ -504,9 +270,8 @@ complete_lps AS (
       WHEN pool_name IS NOT NULL THEN pool_name
       WHEN pool_name IS NULL
       AND platform IN (
-        'uniswap-v3',
-        'sushiswap',
-        'dackieswap'
+        'dragonswap-v3',
+        'klayswap-v3'
       ) THEN CONCAT(
         COALESCE(
           c0.token_symbol,
@@ -528,9 +293,8 @@ complete_lps AS (
           0
         ),
         CASE
-          WHEN platform = 'uniswap-v3' THEN ' UNI-V3 LP'
-          WHEN platform = 'sushiswap' THEN ' SLP'
-          WHEN platform = 'dackieswap' THEN ' DLP'
+          WHEN platform = 'dragonswap-v3' THEN ' DS-V3 LP'
+          WHEN platform = 'klayswap-v3' THEN ' KS-V3 LP'
         END
       )
       WHEN pool_name IS NULL
@@ -682,9 +446,8 @@ heal_model AS (
       WHEN pool_name IS NOT NULL THEN pool_name
       WHEN pool_name IS NULL
       AND platform IN (
-        'uniswap-v3',
-        'sushiswap',
-        'dackieswap'
+        'dragonswap-v3',
+        'klayswap-v3'
       ) THEN CONCAT(
         COALESCE(
           c0.token_symbol,
@@ -706,9 +469,8 @@ heal_model AS (
           0
         ),
         CASE
-          WHEN platform = 'uniswap-v3' THEN ' UNI-V3 LP'
-          WHEN platform = 'sushiswap' THEN ' SLP'
-          WHEN platform = 'dackieswap' THEN ' DLP'
+          WHEN platform = 'dragonswap-v3' THEN ' DS-V3 LP'
+          WHEN platform = 'klayswap-v3' THEN ' KS-V3 LP'
         END
       )
       WHEN pool_name IS NULL
@@ -1221,4 +983,4 @@ SELECT
   SYSDATE() AS modified_timestamp,
   '{{ invocation_id }}' AS _invocation_id
 FROM
-  FINAL #}
+  FINAL
