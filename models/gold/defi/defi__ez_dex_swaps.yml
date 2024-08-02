@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: defi__ez_dex_swaps
-    description: '{{ doc("eth_ez_dex_swaps_table_doc") }}'
+    description: '{{ doc("ez_dex_swaps_table_doc") }}'
 
     columns:
       - name: BLOCK_NUMBER
