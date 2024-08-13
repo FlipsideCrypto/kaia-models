@@ -26,7 +26,7 @@ AND contract_address NOT IN (
 ORDER BY
     total_event_count DESC
 LIMIT
-    25
+    200
 ), function_sigs AS (
     SELECT
         '0x313ce567' AS function_sig,
@@ -82,15 +82,13 @@ node_call AS (
         *,
         KAIA_DEV.live.udf_api(
             'POST',
-            --'{Service}',
-            'https://archive-en.cypress.klaytn.net',
+            'https://public-en-cypress.klaytn.net',
             {},
-            rpc_request,
-            --'Vault/prod/klaytn/blockjoy/mainnet2'
+            batch_rpc_request,
             ''
         ) AS response
     FROM
-        ready_reads
+        batch_reads
     WHERE
         EXISTS (
             SELECT
@@ -100,7 +98,8 @@ node_call AS (
             LIMIT
                 1
         ) 
-), flat_responses AS (
+),
+flat_responses AS (
     SELECT
         VALUE :id :: STRING AS call_id,
         VALUE :result :: STRING AS read_result
