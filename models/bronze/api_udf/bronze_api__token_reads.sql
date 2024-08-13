@@ -9,7 +9,7 @@ WITH base AS (
 
     SELECT
         contract_address,
-        latest_event_block AS latest_block
+        (SELECT max(block_number) from {{ ref('silver__blocks') }}) AS latest_block
     FROM
         {{ ref('silver__relevant_contracts') }}
     WHERE
@@ -26,7 +26,7 @@ AND contract_address NOT IN (
 ORDER BY
     total_event_count DESC
 LIMIT
-    200
+    25
 ), function_sigs AS (
     SELECT
         '0x313ce567' AS function_sig,
@@ -80,17 +80,17 @@ batch_reads AS (
 node_call AS (
     SELECT
         *,
-        {{ target.database }}.live.udf_api(
+        KAIA_DEV.live.udf_api(
             'POST',
+            --'{Service}',
             'https://archive-en.cypress.klaytn.net',
-            OBJECT_CONSTRUCT(
-                'Content-Type',
-                'application/json'
-            ),
-            batch_rpc_request
+            {},
+            rpc_request,
+            --'Vault/prod/klaytn/blockjoy/mainnet2'
+            ''
         ) AS response
     FROM
-        batch_reads
+        ready_reads
     WHERE
         EXISTS (
             SELECT
@@ -99,7 +99,7 @@ node_call AS (
                 ready_reads
             LIMIT
                 1
-        )
+        ) 
 ), flat_responses AS (
     SELECT
         VALUE :id :: STRING AS call_id,
