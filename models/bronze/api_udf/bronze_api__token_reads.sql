@@ -80,7 +80,7 @@ batch_reads AS (
 node_call AS (
     SELECT
         *,
-        KAIA_DEV.live.udf_api(
+        {{target.database}}.live.udf_api(
             'POST',
             'https://public-en-cypress.klaytn.net',
             {},
