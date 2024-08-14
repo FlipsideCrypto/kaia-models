@@ -9,7 +9,12 @@ WITH base AS (
 
     SELECT
         contract_address,
-        latest_event_block AS latest_block
+        (
+            SELECT
+                MAX(block_number)
+            FROM
+                {{ ref('silver__blocks') }}
+        ) AS latest_block
     FROM
         {{ ref('silver__relevant_contracts') }}
     WHERE
@@ -82,12 +87,9 @@ node_call AS (
         *,
         {{ target.database }}.live.udf_api(
             'POST',
-            'https://archive-en.cypress.klaytn.net',
-            OBJECT_CONSTRUCT(
-                'Content-Type',
-                'application/json'
-            ),
-            batch_rpc_request
+            'https://public-en-cypress.klaytn.net',{},
+            batch_rpc_request,
+            ''
         ) AS response
     FROM
         batch_reads
