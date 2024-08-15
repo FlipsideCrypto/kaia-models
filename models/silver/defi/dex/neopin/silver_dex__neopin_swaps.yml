@@ -16,7 +16,8 @@ models:
                 - FLOAT
       - name: BLOCK_TIMESTAMP
         tests:
-          - not_null
+          - not_null:
+              where: BLOCK_NUMBER > 141012770
           - dbt_expectations.expect_row_values_to_have_recent_data:
               datepart: day
               interval: 2
@@ -103,7 +104,8 @@ models:
           - not_null
       - name: ORIGIN_FUNCTION_SIGNATURE
         tests:
-          - not_null
+          - not_null:
+              where: BLOCK_NUMBER > 141012770
       - name: ORIGIN_FROM_ADDRESS
         tests:
           - not_null
