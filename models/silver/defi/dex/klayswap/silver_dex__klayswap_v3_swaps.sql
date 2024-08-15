@@ -36,7 +36,7 @@ WITH base_swaps AS (
     FROM
         {{ ref('silver__logs') }}
     WHERE
-        topics [0] :: STRING = '0x022d176d604c15661a2acf52f28fd69bdd2c755884c08a67132ffeb8098330e0'
+        topics [0] :: STRING = '0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67'
         AND tx_status
         AND event_removed = 'false'
 
