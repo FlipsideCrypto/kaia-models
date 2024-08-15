@@ -96,7 +96,7 @@ klayswap_v2 AS (
     tx_to,
     event_index,
     platform,
-    'v1' AS version,
+    'v2' AS version,
     _log_id,
     _inserted_timestamp
   FROM

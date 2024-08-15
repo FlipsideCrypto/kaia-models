@@ -64,7 +64,7 @@ pool_data AS (
 ),
 FINAL AS (
     SELECT
-        'base' AS blockchain,
+        'kaia' AS blockchain,
         block_number,
         block_timestamp,
         tx_hash,
