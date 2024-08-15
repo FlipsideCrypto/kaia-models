@@ -9,9 +9,12 @@
 
 SELECT
     HOUR,
-    LOWER(
-        p.token_address
-    ) AS token_address,
+    CASE
+        WHEN asset_id = 'wrapped-klay' THEN '0x19aac5f612f524b754ca7e7c41cbfa2e981a4432'
+        ELSE LOWER(
+            p.token_address
+        )
+    END AS token_address,
     asset_id,
     symbol,
     NAME,

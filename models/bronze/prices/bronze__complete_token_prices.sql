@@ -28,7 +28,10 @@ FROM
         'complete_token_prices'
     ) }}
 WHERE
-    blockchain IN ('klaytn','kaia')
+    blockchain IN (
+        'klaytn',
+        'kaia'
+    )
 UNION ALL
 SELECT
     HOUR,
@@ -57,5 +60,7 @@ FROM
     ) }}
 WHERE
     blockchain = 'klay token'
-AND 
-    token_address = '0xe4f05a66ec68b54a58b17c22107b02e0232cc817'
+    AND token_address IN (
+        '0xe4f05a66ec68b54a58b17c22107b02e0232cc817',
+        '0x19aac5f612f524b754ca7e7c41cbfa2e981a4432'
+    )
