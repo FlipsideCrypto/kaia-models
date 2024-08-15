@@ -71,7 +71,7 @@ SELECT
     symbols: token0 :: STRING AS token0_symbol,
     decimals: token0 :: STRING AS token0_decimal
 FROM kaia.defi.dim_dex_liquidity_pools
-WHERE token0 = '0x4200000000000000000000000000000000000006'
+WHERE token0 = '0x98a8345bb9d3dda9d808ca1c9142a28f6b0430e1'
 ;
 
 {% enddocs %}
