@@ -7,9 +7,7 @@
 ) }}
 
 SELECT
-    CASE
-        WHEN asset_id = 'wrapped-klay' THEN '0x19aac5f612f524b754ca7e7c41cbfa2e981a4432'
-        ELSE LOWER(
+    LOWER(
             a.token_address
         )
     END AS token_address,
