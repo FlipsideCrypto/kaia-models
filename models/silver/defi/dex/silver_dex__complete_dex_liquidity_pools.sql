@@ -297,41 +297,6 @@ complete_lps AS (
           WHEN platform = 'klayswap-v3' THEN ' KS-V3 LP'
         END
       )
-      WHEN pool_name IS NULL
-      AND platform IN (
-        'balancer',
-        'curve'
-      ) THEN CONCAT(
-        COALESCE(c0.token_symbol, SUBSTRING(token0, 1, 5) || '...' || SUBSTRING(token0, 39, 42)),
-        CASE
-          WHEN token1 IS NOT NULL THEN '-' || COALESCE(c1.token_symbol, SUBSTRING(token1, 1, 5) || '...' || SUBSTRING(token1, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token2 IS NOT NULL THEN '-' || COALESCE(c2.token_symbol, SUBSTRING(token2, 1, 5) || '...' || SUBSTRING(token2, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token3 IS NOT NULL THEN '-' || COALESCE(c3.token_symbol, SUBSTRING(token3, 1, 5) || '...' || SUBSTRING(token3, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token4 IS NOT NULL THEN '-' || COALESCE(c4.token_symbol, SUBSTRING(token4, 1, 5) || '...' || SUBSTRING(token4, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token5 IS NOT NULL THEN '-' || COALESCE(c5.token_symbol, SUBSTRING(token5, 1, 5) || '...' || SUBSTRING(token5, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token6 IS NOT NULL THEN '-' || COALESCE(c6.token_symbol, SUBSTRING(token6, 1, 5) || '...' || SUBSTRING(token6, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token7 IS NOT NULL THEN '-' || COALESCE(c7.token_symbol, SUBSTRING(token7, 1, 5) || '...' || SUBSTRING(token7, 39, 42))
-          ELSE ''
-        END
-      )
       ELSE CONCAT(
         COALESCE(
           c0.token_symbol,
@@ -471,41 +436,6 @@ heal_model AS (
         CASE
           WHEN platform = 'dragonswap-v3' THEN ' DS-V3 LP'
           WHEN platform = 'klayswap-v3' THEN ' KS-V3 LP'
-        END
-      )
-      WHEN pool_name IS NULL
-      AND platform IN (
-        'balancer',
-        'curve'
-      ) THEN CONCAT(
-        COALESCE(c0.token_symbol, SUBSTRING(token0, 1, 5) || '...' || SUBSTRING(token0, 39, 42)),
-        CASE
-          WHEN token1 IS NOT NULL THEN '-' || COALESCE(c1.token_symbol, SUBSTRING(token1, 1, 5) || '...' || SUBSTRING(token1, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token2 IS NOT NULL THEN '-' || COALESCE(c2.token_symbol, SUBSTRING(token2, 1, 5) || '...' || SUBSTRING(token2, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token3 IS NOT NULL THEN '-' || COALESCE(c3.token_symbol, SUBSTRING(token3, 1, 5) || '...' || SUBSTRING(token3, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token4 IS NOT NULL THEN '-' || COALESCE(c4.token_symbol, SUBSTRING(token4, 1, 5) || '...' || SUBSTRING(token4, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token5 IS NOT NULL THEN '-' || COALESCE(c5.token_symbol, SUBSTRING(token5, 1, 5) || '...' || SUBSTRING(token5, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token6 IS NOT NULL THEN '-' || COALESCE(c6.token_symbol, SUBSTRING(token6, 1, 5) || '...' || SUBSTRING(token6, 39, 42))
-          ELSE ''
-        END,
-        CASE
-          WHEN token7 IS NOT NULL THEN '-' || COALESCE(c7.token_symbol, SUBSTRING(token7, 1, 5) || '...' || SUBSTRING(token7, 39, 42))
-          ELSE ''
         END
       )
       ELSE CONCAT(
