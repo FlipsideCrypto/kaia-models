@@ -8,9 +8,8 @@
 
 SELECT
     LOWER(
-            a.token_address
-        )
-    END AS token_address,
+        A.token_address
+    ) AS token_address,
     asset_id,
     symbol,
     NAME,
