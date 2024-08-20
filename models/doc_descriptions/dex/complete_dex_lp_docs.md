@@ -1,6 +1,6 @@
 {% docs kaia_dex_lp_table_doc %}
 
-This table contains details on decentralized exchange (DEX) liquidity pools (LP) on the kaia blockchain, including the tokens, symbols and decimals within each pool alongside the following protocols: DRAGONSWAP, KAIASWAP, KLAYSWAP, AND NEOPIN.
+This table contains details on decentralized exchange (DEX) liquidity pools (LP) on the kaia blockchain, including the tokens, symbols, and decimals within each pool alongside the following protocols: var("DEX_PROTOCOLS")
 
 {% enddocs %}
 
@@ -91,5 +91,19 @@ The contract address for the liquidity pool.
 {% docs kaia_dex_pool_name %}
 
 The name of the liquidity pool, where available. In some cases, the pool name is a concatenation of symbols or token addresses.
+
+{% enddocs %}
+
+{% docs orders_status %}
+
+Orders can be one of the following statuses:
+
+| status         | description                                                               |
+|----------------|---------------------------------------------------------------------------|
+| placed         | The order has been placed but has not yet left the warehouse              |
+| shipped        | The order has been shipped to the customer and is currently in transit     |
+| completed      | The order has been received by the customer                               |
+| returned       | The order has been returned by the customer and received at the warehouse |
+
 
 {% enddocs %}

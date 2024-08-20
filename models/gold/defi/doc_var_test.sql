@@ -1,0 +1,1 @@
+{{ log(var('DEX_PROTOCOLS'), info=True) }}

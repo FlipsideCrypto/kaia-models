@@ -5,7 +5,7 @@ models:
 
     columns:
       - name: BLOCK_NUMBER
-        description: '{{ doc("kaia_block_number") }}'
+        description: '{{ doc("orders_status") }}'
       - name: BLOCK_TIMESTAMP
         description: '{{ doc("kaia_block_timestamp") }}'
       - name: TX_HASH

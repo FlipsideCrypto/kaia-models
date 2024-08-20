@@ -1,5 +1,7 @@
 {% docs __overview__ %}
 
+![Logo](./assets/flip_box.png)
+
 # Welcome to the Flipside Crypto Kaia Models Documentation!
 
 ## **What does this documentation cover?**

@@ -14,7 +14,7 @@ WITH base_metadata AS (
         read_result AS read_output,
         _inserted_timestamp
     FROM
-        {{ ref('bronze_api__token_reads') }}
+        kaia.bronze_api.token_reads
     WHERE
         read_result IS NOT NULL
         AND read_result <> '0x'

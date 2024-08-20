@@ -51,6 +51,27 @@ query-comment:
 models:
   +copy_grants: true
   +on_schema_change: "append_new_columns"
+
+# Hide package
+  dbt_utils: 
+    +docs:
+      show: false
+  livequery_models: 
+    +docs:
+      show: false
+  dbt_snowflake_query_tags_models: 
+    +docs:
+      show: false
+  dbt_date: 
+    +docs:
+      show: false
+  dbt_expectiations: 
+    +docs:
+      show: false
+  dbt_external_tables: 
+    +docs:
+      show: false
+
   
 # In this example config, we tell dbt to build all models in the example/ directory
 # as tables. These settings can be overridden in the individual model files
@@ -71,3 +92,4 @@ vars:
   EXTERNAL_FUNCTION_URI: '{{var("config")["dev"]["EXTERNAL_FUNCTION_URI"]}}'
   ROLES: |
       ["INTERNAL_DEV"]
+  DEX_PROTOCOLS: "DRAGONSWAP, KAIASWAP, KLAYSWAP, AND NEOPIN"
