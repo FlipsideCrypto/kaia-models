@@ -5,7 +5,7 @@
     unique_key = "block_number",
     cluster_by = ['modified_timestamp::DATE','partition_key'],
     full_refresh = false,
-    tags = ['traces_reload']
+    tags = ['non_realtime']
 ) }}
 
 {{ fsc_evm.silver_traces_v1(
