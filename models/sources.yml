@@ -38,4 +38,9 @@ sources:
       {{ "KLAYTN_DEV" if var("STREAMLINE_USE_DEV_FOR_EXTERNAL_TABLES", False) else "KLAYTN" }}
     tables:
       - name: decoded_logs
+      - name: receipts
+      - name: blocks
+      - name: transactions
+      - name: traces
+      - name: confirm_blocks
 
