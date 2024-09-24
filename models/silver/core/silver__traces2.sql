@@ -11,6 +11,5 @@
 {{ fsc_evm.silver_traces_v1(
     full_reload_start_block = 20000000,
     full_reload_blocks = 25000000,
-    full_reload_mode = true,
     use_partition_key = true
 ) }}
