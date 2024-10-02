@@ -5,7 +5,7 @@
     meta={
         'database_tags':{
             'table': {
-                'PROTOCOL': 'DRAGONSWAP, KAIASWAP, KLAYSWAP, NEOPIN',
+                'PROTOCOL': 'DRAGONSWAP, KAIASWAP, KLAYSWAP, NEOPIN, CAPYBARA', 
                 'PURPOSE': 'DEX, SWAPS'
             }
         }
