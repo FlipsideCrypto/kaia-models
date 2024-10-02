@@ -61,7 +61,7 @@ swaps_base AS (
         ON l.contract_address = p.pool_address
     WHERE
         topics [0] :: STRING = '0x7fa01e8d24e5a6ec56e00b4ff8ee7ed97e7650a7846ec494bbaa5d65f1be9ea4'
-        AND tx_status = TRUE
+        AND tx_status
 
 {% if is_incremental() %}
 AND _inserted_timestamp >= (

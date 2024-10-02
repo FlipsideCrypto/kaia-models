@@ -23,8 +23,8 @@ WITH contract_deployments AS (
             '0x442f2c12bd436cfdc736170274287cd70c5b6ab5'
         ) -- Exclude testAsset
         AND TYPE ILIKE 'create%'
-        AND tx_status = TRUE
-        AND trace_status = TRUE
+        AND tx_status
+        AND trace_status
 
 {% if is_incremental() %}
 AND _inserted_timestamp >= (
