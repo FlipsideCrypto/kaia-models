@@ -17,9 +17,9 @@ models:
       - name: VALUE
         description: '{{ doc("evm_traces_value") }}'
       - name: VALUE_PRECISE_RAW
-        description: '{{ doc("precise_amount_unadjusted") }}'
+        description: '{{ doc("evm_precise_amount_unadjusted") }}'
       - name: VALUE_PRECISE
-        description: '{{ doc("precise_amount_adjusted") }}'
+        description: '{{ doc("evm_precise_amount_adjusted") }}'
       - name: GAS
         description: '{{ doc("evm_traces_gas") }}'
       - name: GAS_USED
@@ -45,11 +45,11 @@ models:
       - name: TRACE_INDEX
         description: The index of the trace within the transaction. 
       - name: FACT_TRACES_ID
-        description: '{{ doc("pk") }}'   
+        description: '{{ doc("evm_pk") }}'   
       - name: INSERTED_TIMESTAMP
-        description: '{{ doc("inserted_timestamp") }}'   
+        description: '{{ doc("evm_inserted_timestamp") }}'   
       - name: MODIFIED_TIMESTAMP
-        description: '{{ doc("modified_timestamp") }}' 
+        description: '{{ doc("evm_modified_timestamp") }}' 
 
 
 

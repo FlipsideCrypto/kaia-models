@@ -41,10 +41,10 @@ models:
       - name: TOKEN_PRICE
         description: '{{ doc("evm_transfer_token_price") }}'
       - name: _INSERTED_TIMESTAMP
-        description: '{{ doc("internal_column") }}'
+        description: '{{ doc("evm_internal_column") }}'
       - name: EZ_TOKEN_TRANSFERS_ID
-        description: '{{ doc("pk") }}'   
+        description: '{{ doc("evm_pk") }}'   
       - name: INSERTED_TIMESTAMP
-        description: '{{ doc("inserted_timestamp") }}'   
+        description: '{{ doc("evm_inserted_timestamp") }}'   
       - name: MODIFIED_TIMESTAMP
-        description: '{{ doc("modified_timestamp") }}' 
+        description: '{{ doc("evm_modified_timestamp") }}' 
