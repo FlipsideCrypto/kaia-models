@@ -1,5 +1,7 @@
 {% docs __overview__ %}
 
+![Logo](https://media.licdn.com/dms/image/v2/D560BAQE3g5bMywl2mw/company-logo_200_200/company-logo_200_200/0/1684258463654/flipside_crypto_logo?e=2147483647&v=beta&t=nepxZpk3bXWwenRZv-vxnsMyAG-BwhW4KMhCGhV6_kE)
+
 # Welcome to the Flipside Crypto Kaia Models Documentation!
 
 ## **What does this documentation cover?**
