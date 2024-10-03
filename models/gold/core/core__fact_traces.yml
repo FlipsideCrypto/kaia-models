@@ -39,11 +39,11 @@ models:
       - name: SUB_TRACES
         description: '{{ doc("evm_traces_sub") }}' 
       - name: TRACE_SUCCEEDED
-        description: The status of the trace, either `SUCCESS` or `FAIL`
+        description: '{{ doc("evm_trace_succeeded") }}' 
       - name: ERROR_REASON
-        description: The reason for the trace failure, if any.
+        description: '{{ doc("evm_trace_error_reason") }}'
       - name: TRACE_INDEX
-        description: The index of the trace within the transaction. 
+        description: '{{ doc("evm_trace_index") }}'
       - name: FACT_TRACES_ID
         description: '{{ doc("evm_pk") }}'   
       - name: INSERTED_TIMESTAMP

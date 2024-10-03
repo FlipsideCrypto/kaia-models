@@ -41,9 +41,9 @@ models:
       - name: CUMULATIVE_GAS_USED
         description: '{{ doc("evm_cumulative_gas_used") }}' 
       - name: MAX_FEE_PER_GAS
-        description: The maximum fee per gas of the transaction, in Gwei.
+        description: '{{ doc("evm_max_fee_per_gas") }}'
       - name: MAX_PRIORITY_FEE_PER_GAS
-        description: The maximum priority fee per gas of the transaction, in Gwei.
+        description: '{{ doc("evm_max_priority_fee_per_gas") }}'
       - name: TX_SUCCEEDED
         description: '{{ doc("evm_tx_status") }}' 
       - name: INPUT_DATA
@@ -51,11 +51,11 @@ models:
       - name: ORIGIN_FUNCTION_SIGNATURE 
         description: '{{ doc("evm_tx_origin_sig") }}'
       - name: R
-        description: The r value of the transaction signature.
+        description: '{{ doc("evm_r") }}'
       - name: S
-        description: The s value of the transaction signature.
+        description: '{{ doc("evm_s") }}'
       - name: V
-        description: The v value of the transaction signature.
+        description: '{{ doc("evm_v") }}'
       - name: FACT_TRANSACTIONS_ID
         description: '{{ doc("evm_pk") }}'   
       - name: INSERTED_TIMESTAMP
