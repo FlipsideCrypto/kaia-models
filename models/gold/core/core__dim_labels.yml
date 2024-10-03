@@ -10,32 +10,32 @@ models:
             - ADDRESS
     columns:
       - name: BLOCKCHAIN
-        description: '{{ doc("kaia_label_blockchain") }}'
+        description: '{{ doc("evm_label_blockchain") }}'
         tests:
           - not_null
       - name: CREATOR
-        description: '{{ doc("kaia_label_creator") }}'
+        description: '{{ doc("evm_label_creator") }}'
         tests:
           - not_null
       - name: ADDRESS
-        description: '{{ doc("kaia_label_address") }}'
+        description: '{{ doc("evm_label_address") }}'
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_match_regex:
               regex: 0[xX][0-9a-fA-F]+
       - name: ADDRESS_NAME
-        description: '{{ doc("kaia_labels_table") }}'
+        description: '{{ doc("evm_labels_table") }}'
         tests:
           - dbt_expectations.expect_column_values_to_be_in_type_list:
               column_type_list:
                 - STRING
                 - VARCHAR
       - name: LABEL_TYPE
-        description: '{{ doc("kaia_label_type") }}'
+        description: '{{ doc("evm_label_type") }}'
         tests:
           - not_null
       - name: LABEL_SUBTYPE
-        description: '{{ doc("kaia_label_subtype") }}'
+        description: '{{ doc("evm_label_subtype") }}'
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_in_type_list:
@@ -43,7 +43,7 @@ models:
                 - STRING
                 - VARCHAR
       - name: PROJECT_NAME
-        description: '{{ doc("kaia_project_name") }}'
+        description: '{{ doc("evm_project_name") }}'
         tests:
           - not_null
           - dbt_expectations.expect_column_values_to_be_in_type_list:
