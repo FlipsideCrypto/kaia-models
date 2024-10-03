@@ -1,7 +1,7 @@
 version: 2
 models:
   - name: defi__dim_dex_liquidity_pools
-    description: '{{ doc("kaia_dex_lp_table_doc") }}'
+    description: '{{ doc("evm_dim_dex_lp_table_doc") }}'
 
     columns:
       - name: CREATION_BLOCK
