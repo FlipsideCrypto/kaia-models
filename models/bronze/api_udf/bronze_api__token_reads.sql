@@ -87,9 +87,14 @@ node_call AS (
         *,
         {{ target.database }}.live.udf_api(
             'POST',
-            'https://public-en-cypress.klaytn.net',{},
+            CONCAT(
+                '{service}',
+                '/',
+                '{Authentication}'
+            ),
+            {},
             batch_rpc_request,
-            ''
+            'Vault/prod/klaytn/quicknode/mainnet'
         ) AS response
     FROM
         batch_reads
