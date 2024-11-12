@@ -15,7 +15,7 @@ env:
   PASSWORD: "${{ secrets.PASSWORD }}"
   REGION: "${{ vars.REGION }}"
   DATABASE: "${{ vars.DATABASE }}"
-  WAREHOUSE: "${{ vars.WAREHOUSE }}"
+  WAREHOUSE: BACKFILL
   SCHEMA: "${{ vars.SCHEMA }}"
 
 concurrency:
