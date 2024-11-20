@@ -15,13 +15,14 @@ WITH base AS (
         total_interaction_count >= 1000
 
 {% if is_incremental() %}
-EXCEPT
+and contract_address not in (
 SELECT
     contract_address
 FROM
     {{ this }}
-WHERE
-    abi_data :status_code :: INTEGER = 200
+    WHERE
+        abi_data :status_code :: INTEGER = 200
+)
 {% endif %}
 order by total_interaction_count desc
 LIMIT
