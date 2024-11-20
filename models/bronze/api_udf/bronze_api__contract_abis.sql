@@ -23,6 +23,7 @@ FROM
 WHERE
     abi_data :status_code :: INTEGER = 200
 {% endif %}
+order by total_interaction_count desc
 LIMIT
     50
 ), 
