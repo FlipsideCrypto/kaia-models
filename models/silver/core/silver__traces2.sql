@@ -50,6 +50,7 @@ WITH bronze_traces AS (
     {% endif %}
 
     and block_number > 160000000
+    and partition_key > 160000000
 
     qualify(ROW_NUMBER() over (PARTITION BY block_number, tx_position
     ORDER BY
