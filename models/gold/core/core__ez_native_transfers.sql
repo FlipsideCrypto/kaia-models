@@ -27,6 +27,7 @@ SELECT
         ) }}
     ) AS ez_native_transfers_id,
     inserted_timestamp,
-    modified_timestamp
+    modified_timestamp,
+    identifier --deprecate
 FROM
     {{ ref('silver__native_transfers') }}
