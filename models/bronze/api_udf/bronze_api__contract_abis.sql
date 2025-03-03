@@ -47,7 +47,16 @@ row_nos AS (
 batched AS ({% for item in range(150) %}
 SELECT
     rn.contract_address, 
-    live.udf_api(concat('https://api-cypress.klaytnscope.com/v2/accounts/',contract_address)) as abi_data,
+    live.udf_api(
+        'GET',
+        concat('https://mainnet-oapi.kaiascan.io/api/v1/contracts/',rn.contract_address, '/abi?apikey={key}'),
+    OBJECT_CONSTRUCT(
+            'Content-Type', 'application/json',
+            'fsc-quantum-state', 'livequery'
+        ),
+        NULL,
+        'Vault/prod/block_explorers/kaia_scan'
+    ) as abi_data,
     SYSDATE() AS _inserted_timestamp
 FROM
     row_nos rn
