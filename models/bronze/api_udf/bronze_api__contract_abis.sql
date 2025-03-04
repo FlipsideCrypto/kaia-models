@@ -49,7 +49,7 @@ SELECT
     rn.contract_address, 
     live.udf_api(
         'GET',
-        concat('https://mainnet-oapi.kaiascan.io/api/v1/contracts/',rn.contract_address, '/abi?apikey={key}'),
+        CONCAT('https://mainnet-oapi.kaiascan.io/api?module=contract&action=getabi&address=', rn.contract_address, '&apikey={key}'),
     OBJECT_CONSTRUCT(
             'Content-Type', 'application/json',
             'fsc-quantum-state', 'livequery'
