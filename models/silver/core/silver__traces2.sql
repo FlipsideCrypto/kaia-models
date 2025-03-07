@@ -9,6 +9,8 @@
 ) }}
 
 WITH bronze_traces AS (
+
+    {% if is_incremental() and not var('full_reload_mode') %}
     SELECT
         block_number,
         partition_key,
@@ -16,8 +18,6 @@ WITH bronze_traces AS (
         DATA :result AS full_traces,
         _inserted_timestamp
     FROM
-
-    {% if is_incremental() and not full_reload_mode %}
         {{ ref('bronze__streamline_traces') }}
         WHERE
             _inserted_timestamp >= (
@@ -27,30 +27,53 @@ WITH bronze_traces AS (
                     {{ this }}
             )
             AND DATA :result IS NOT NULL
+        and block_number > 160000000
+        and partition_key > 160000000
 
-    {% elif is_incremental() and full_reload_mode %}
-        {{ ref('bronze__streamline_fr_traces') }}
+    {% elif is_incremental() and var('full_reload_mode') and not var('initial_load') %}
+    SELECT
+        VALUE :BLOCK_NUMBER :: INT AS block_number,
+        partition_key,
+        VALUE :array_index :: INT AS tx_position,
+        DATA :result AS full_traces,
+        _inserted_timestamp
+    FROM
+        {{ source('klaytn_bronze', 'streamline_fr_traces') }}
         WHERE
-            partition_key BETWEEN (
-                SELECT
-                    MAX(partition_key) - 100000
-                FROM
-                    {{ this }}
-            )
-            AND (
-                SELECT
-                    MAX(partition_key) + 5000000
-                FROM
-                    {{ this }}
-            )
+        partition_key BETWEEN (
+            SELECT
+                MAX(partition_key)
+            FROM
+                {{ this }}
+            WHERE
+                partition_key <= 74000000
+            AND _inserted_timestamp >= '2024-10-01'
+        ) - 1000000
+        AND (
+            SELECT
+                MAX(partition_key)
+            FROM
+                {{ this }}
+            WHERE
+                partition_key <= 74000000
+            AND _inserted_timestamp >= '2024-10-01'
+        ) + 5000000
+        AND DATA :result IS NOT NULL
 
     {% else %}
-        {{ ref('bronze__streamline_fr_traces') }}
-        WHERE partition_key <= 149500000
-    {% endif %}
-
-    and block_number > 160000000
-    and partition_key > 160000000
+    SELECT
+        VALUE :BLOCK_NUMBER :: INT AS block_number,
+        partition_key,
+        VALUE :array_index :: INT AS tx_position,
+        DATA :result AS full_traces,
+        _inserted_timestamp
+    FROM
+        {{ source('klaytn_bronze', 'streamline_fr_traces') }}
+        WHERE 
+            block_number BETWEEN 0 AND 5000000
+            AND DATA :result IS NOT NULL
+            AND partition_key <= 5000000
+        {% endif %}
 
     qualify(ROW_NUMBER() over (PARTITION BY block_number, tx_position
     ORDER BY
