@@ -1,6 +1,11 @@
 version: 2
 
 sources:
+  - name: klaytn_bronze
+    database: klaytn
+    schema: bronze
+    tables:
+      - name: streamline_fr_traces
   - name: klaytn_silver
     database: klaytn
     schema: silver
