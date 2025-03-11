@@ -34,21 +34,21 @@ WITH bronze_traces AS (
     FROM
         {{ ref('bronze__streamline_fr_traces') }}
         WHERE
-        partition_key BETWEEN (
+        block_number BETWEEN (
             SELECT
-                MAX(partition_key)
+                MAX(block_number)
             FROM
                 {{ this }}
             WHERE
-                partition_key < 80000000
+                block_number < 80000000
         ) - 1000000
         AND (
             SELECT
-                MAX(partition_key)
+                MAX(block_number)
             FROM
                 {{ this }}
             WHERE
-                partition_key < 80000000
+                block_number < 80000000
         ) + 4000000
         AND DATA :result IS NOT NULL
 
@@ -57,11 +57,11 @@ WITH bronze_traces AS (
         {{ ref('bronze__streamline_fr_traces') }}
         WHERE 
             DATA :result IS NOT NULL
-            AND partition_key BETWEEN 0 AND 5000000
+            AND block_number BETWEEN 0 AND 5000000
 
     {% else %}
         {{ ref('bronze__streamline_fr_traces') }}
-        WHERE partition_key <= 149500000
+        WHERE block_number <= 149500000
     {% endif %}
 
     qualify(ROW_NUMBER() over (PARTITION BY block_number, tx_position
