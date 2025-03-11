@@ -33,7 +33,16 @@ WITH bronze_traces AS (
     {% elif is_incremental() and var('full_reload_mode', false) and not var('initial_load', false) %}
         {{ ref('bronze__streamline_fr_traces') }}
         WHERE
-        block_number BETWEEN (
+        partition_key < (
+            SELECT
+                MAX(block_number)
+            FROM
+                {{ this }}
+            WHERE
+                block_number < 80000000
+        ) + 2500000
+        AND DATA :result IS NOT NULL
+        AND block_number BETWEEN (
             SELECT
                 MAX(block_number)
             FROM
@@ -49,13 +58,13 @@ WITH bronze_traces AS (
             WHERE
                 block_number < 80000000
         ) + 2000000
-        AND DATA :result IS NOT NULL
 
     {% elif var('initial_load', false) %}
         {{ ref('bronze__streamline_fr_traces') }}
         WHERE 
             DATA :result IS NOT NULL
             AND block_number BETWEEN 0 AND 5000000
+            and partition_key < 5500000
 
     {% else %}
         {{ ref('bronze__streamline_fr_traces') }}
