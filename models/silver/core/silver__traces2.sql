@@ -40,7 +40,7 @@ WITH bronze_traces AS (
                 {{ this }}
             WHERE
                 block_number < 80000000
-        ) + 2500000
+        ) + 2100000
         AND DATA :result IS NOT NULL
         AND block_number BETWEEN (
             SELECT
