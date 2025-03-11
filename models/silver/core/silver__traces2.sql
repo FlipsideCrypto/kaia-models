@@ -10,13 +10,13 @@
 
 WITH bronze_traces AS (
 
-    {% if is_incremental() and not var('full_reload_mode') %}
     SELECT
         block_number,
         partition_key,
         VALUE :array_index :: INT AS tx_position,
         DATA :result AS full_traces,
         _inserted_timestamp
+    {% if is_incremental() and not var('full_reload_mode', false) %}
     FROM
         {{ ref('bronze__streamline_traces') }}
         WHERE
@@ -31,12 +31,6 @@ WITH bronze_traces AS (
         and partition_key > 160000000
 
     {% elif is_incremental() and var('full_reload_mode', false) and not var('initial_load', false) %}
-    SELECT
-        VALUE :BLOCK_NUMBER :: INT AS block_number,
-        partition_key,
-        VALUE :array_index :: INT AS tx_position,
-        DATA :result AS full_traces,
-        _inserted_timestamp
     FROM
         {{ ref('bronze__streamline_fr_traces') }}
         WHERE
@@ -59,12 +53,6 @@ WITH bronze_traces AS (
         AND DATA :result IS NOT NULL
 
     {% elif var('initial_load', false) %}
-    SELECT
-        VALUE :BLOCK_NUMBER :: INT AS block_number,
-        partition_key,
-        VALUE :array_index :: INT AS tx_position,
-        DATA :result AS full_traces,
-        _inserted_timestamp
     FROM
         {{ ref('bronze__streamline_fr_traces') }}
         WHERE 
