@@ -46,8 +46,7 @@ WITH bronze_traces AS (
             FROM
                 {{ this }}
             WHERE
-                partition_key <= 74000000
-            AND _inserted_timestamp >= '2024-10-01'
+                partition_key < 80000000
         ) - 1000000
         AND (
             SELECT
@@ -55,10 +54,22 @@ WITH bronze_traces AS (
             FROM
                 {{ this }}
             WHERE
-                partition_key <= 74000000
-            AND _inserted_timestamp >= '2024-10-01'
-        ) + 5000000
+                partition_key < 80000000
+        ) + 4000000
         AND DATA :result IS NOT NULL
+
+    {% elif var('initial_load') %}
+    SELECT
+        VALUE :BLOCK_NUMBER :: INT AS block_number,
+        partition_key,
+        VALUE :array_index :: INT AS tx_position,
+        DATA :result AS full_traces,
+        _inserted_timestamp
+    FROM
+        {{ source('klaytn_bronze', 'streamline_fr_traces') }}
+        WHERE 
+            DATA :result IS NOT NULL
+            AND partition_key BETWEEN 0 AND 5000000
 
     {% else %}
     SELECT
@@ -70,9 +81,8 @@ WITH bronze_traces AS (
     FROM
         {{ source('klaytn_bronze', 'streamline_fr_traces') }}
         WHERE 
-            block_number BETWEEN 0 AND 5000000
-            AND DATA :result IS NOT NULL
-            AND partition_key <= 5000000
+            DATA :result IS NOT NULL
+            AND block_number < 149000000
         {% endif %}
 
     qualify(ROW_NUMBER() over (PARTITION BY block_number, tx_position

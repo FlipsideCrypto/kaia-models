@@ -23,27 +23,29 @@ WITH silver_traces AS (
         {{ ref('silver__traces2') }}
     WHERE
         1 = 1
-        AND block_number > 160000000
 
-    {% if is_incremental() and not full_reload_mode %}
+    {% if is_incremental() and not var('full_reload_mode') %}
+        AND block_number > 160000000
         AND modified_timestamp > (
             SELECT
                 MAX(modified_timestamp)
             FROM
                 {{ this }}
+            WHERE
+                block_number > 160000000
         ) 
-    {% elif is_incremental() and full_reload_mode %}
-        AND block_number BETWEEN (
-            SELECT
-                MAX(block_number)
-            FROM
-                {{ this }}
-        )
-        AND (
-            SELECT
-                MAX(block_number) + 5000000
-            FROM
-                {{ this }}
+    {% elif is_incremental() and var('full_reload_mode')  %}
+        AND block_number < 80000000
+        AND modified_timestamp > coalesce(
+            (
+                SELECT
+                    MAX(modified_timestamp)
+                FROM
+                    {{ this }}
+                WHERE
+                    block_number < 80000000
+            ),
+            '2024-01-01'
         )
     {% else %}
         AND block_number <= 149500000
