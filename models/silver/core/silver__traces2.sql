@@ -30,7 +30,7 @@ WITH bronze_traces AS (
         and block_number > 160000000
         and partition_key > 160000000
 
-    {% elif is_incremental() and var('full_reload_mode') and not var('initial_load') %}
+    {% elif is_incremental() and var('full_reload_mode', false) and not var('initial_load', false) %}
     SELECT
         VALUE :BLOCK_NUMBER :: INT AS block_number,
         partition_key,
@@ -58,7 +58,7 @@ WITH bronze_traces AS (
         ) + 4000000
         AND DATA :result IS NOT NULL
 
-    {% elif var('initial_load') %}
+    {% elif var('initial_load', false) %}
     SELECT
         VALUE :BLOCK_NUMBER :: INT AS block_number,
         partition_key,

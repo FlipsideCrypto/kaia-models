@@ -24,7 +24,7 @@ WITH silver_traces AS (
     WHERE
         1 = 1
 
-    {% if is_incremental() and not var('full_reload_mode') %}
+    {% if is_incremental() and not var('full_reload_mode', false) %}
         AND block_number > 160000000
         AND modified_timestamp > (
             SELECT
@@ -34,7 +34,7 @@ WITH silver_traces AS (
             WHERE
                 block_number > 160000000
         ) 
-    {% elif is_incremental() and var('full_reload_mode')  %}
+    {% elif is_incremental() and var('full_reload_mode', false)  %}
         AND block_number < 80000000
         AND modified_timestamp > coalesce(
             (
