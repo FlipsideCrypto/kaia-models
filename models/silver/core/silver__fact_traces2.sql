@@ -36,7 +36,7 @@ WITH silver_traces AS (
         ) 
     {% elif is_incremental() and var('full_reload_mode', false)  %}
         AND block_number < 80000000
-        AND modified_timestamp > coalesce(
+        AND modified_timestamp > COALESCE(
             (
                 SELECT
                     MAX(modified_timestamp)

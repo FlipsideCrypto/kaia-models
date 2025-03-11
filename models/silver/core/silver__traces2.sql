@@ -38,7 +38,7 @@ WITH bronze_traces AS (
         DATA :result AS full_traces,
         _inserted_timestamp
     FROM
-        {{ source('klaytn_bronze', 'streamline_fr_traces') }}
+        {{ ref('bronze__streamline_fr_traces') }}
         WHERE
         partition_key BETWEEN (
             SELECT
@@ -66,24 +66,15 @@ WITH bronze_traces AS (
         DATA :result AS full_traces,
         _inserted_timestamp
     FROM
-        {{ source('klaytn_bronze', 'streamline_fr_traces') }}
+        {{ ref('bronze__streamline_fr_traces') }}
         WHERE 
             DATA :result IS NOT NULL
             AND partition_key BETWEEN 0 AND 5000000
 
     {% else %}
-    SELECT
-        VALUE :BLOCK_NUMBER :: INT AS block_number,
-        partition_key,
-        VALUE :array_index :: INT AS tx_position,
-        DATA :result AS full_traces,
-        _inserted_timestamp
-    FROM
-        {{ source('klaytn_bronze', 'streamline_fr_traces') }}
-        WHERE 
-            DATA :result IS NOT NULL
-            AND block_number < 149000000
-        {% endif %}
+        {{ ref('bronze__streamline_fr_traces') }}
+        WHERE partition_key <= 149500000
+    {% endif %}
 
     qualify(ROW_NUMBER() over (PARTITION BY block_number, tx_position
     ORDER BY
