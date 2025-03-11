@@ -48,7 +48,7 @@ WITH bronze_traces AS (
                 {{ this }}
             WHERE
                 block_number < 80000000
-        ) + 4000000
+        ) + 2000000
         AND DATA :result IS NOT NULL
 
     {% elif var('initial_load', false) %}
