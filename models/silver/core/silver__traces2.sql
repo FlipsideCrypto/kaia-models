@@ -9,6 +9,7 @@
 ) }}
 
 WITH bronze_traces AS (
+
     SELECT
         block_number,
         partition_key,
@@ -16,8 +17,7 @@ WITH bronze_traces AS (
         DATA :result AS full_traces,
         _inserted_timestamp
     FROM
-
-    {% if is_incremental() and not full_reload_mode %}
+    {% if is_incremental() and not var('full_reload_mode', false) %}
         {{ ref('bronze__streamline_traces') }}
         WHERE
             _inserted_timestamp >= (
@@ -27,30 +27,41 @@ WITH bronze_traces AS (
                     {{ this }}
             )
             AND DATA :result IS NOT NULL
+        and block_number > 160000000
+        and partition_key > 160000000
 
-    {% elif is_incremental() and full_reload_mode %}
+    {% elif is_incremental() and var('full_reload_mode', false) and not var('initial_load', false) %}
         {{ ref('bronze__streamline_fr_traces') }}
         WHERE
-            partition_key BETWEEN (
-                SELECT
-                    MAX(partition_key) - 100000
-                FROM
-                    {{ this }}
-            )
-            AND (
-                SELECT
-                    MAX(partition_key) + 5000000
-                FROM
-                    {{ this }}
-            )
+        DATA :result IS NOT NULL
+        AND partition_key BETWEEN (
+            SELECT
+               ROUND(MAX(block_number),-3)
+            FROM
+                {{ this }}
+            WHERE
+                block_number < 80000000
+        ) - 100000
+        AND (
+            SELECT
+                ROUND(MAX(block_number),-3)
+            FROM
+                {{ this }}
+            WHERE
+                block_number < 80000000
+        ) + 2000000
+
+    {% elif var('initial_load', false) %}
+        {{ ref('bronze__streamline_fr_traces') }}
+        WHERE 
+            DATA :result IS NOT NULL
+            AND block_number BETWEEN 0 AND 5000000
+            and partition_key < 5500000
 
     {% else %}
         {{ ref('bronze__streamline_fr_traces') }}
-        WHERE partition_key <= 149500000
+        WHERE block_number <= 149500000
     {% endif %}
-
-    and block_number > 160000000
-    and partition_key > 160000000
 
     qualify(ROW_NUMBER() over (PARTITION BY block_number, tx_position
     ORDER BY
