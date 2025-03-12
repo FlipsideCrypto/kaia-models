@@ -41,7 +41,7 @@ WITH bronze_traces AS (
                 {{ this }}
             WHERE
                 block_number < 80000000
-        ) - 10000
+        ) - 100000
         AND (
             SELECT
                 ROUND(MAX(block_number),-3)
