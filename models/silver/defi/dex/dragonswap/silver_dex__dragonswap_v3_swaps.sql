@@ -9,7 +9,14 @@
 WITH base_swaps AS (
 
     SELECT
-        *,
+        block_number,
+        block_timestamp,
+        tx_hash,
+        origin_function_signature,
+        origin_from_address,
+        origin_to_address,
+        contract_address,
+        event_index,
         regexp_substr_all(SUBSTR(DATA, 3, len(DATA)), '.{64}') AS segmented_data,
         CONCAT('0x', SUBSTR(topics [1] :: STRING, 27, 40)) AS sender,
         CONCAT('0x', SUBSTR(topics [2] :: STRING, 27, 40)) AS recipient,
@@ -32,7 +39,9 @@ WITH base_swaps AS (
         utils.udf_hex_to_int(
             's2c',
             segmented_data [4] :: STRING
-        ) :: FLOAT AS tick
+        ) :: FLOAT AS tick,
+        concat(tx_hash, '-', event_index) AS _log_id,
+        modified_timestamp AS _inserted_timestamp
     FROM
         {{ ref('silver__logs') }}
     WHERE
@@ -68,7 +77,7 @@ FINAL AS (
         block_number,
         block_timestamp,
         tx_hash,
-        contract_address AS pool_address,
+        pool_address,
         recipient,
         sender,
         fee,

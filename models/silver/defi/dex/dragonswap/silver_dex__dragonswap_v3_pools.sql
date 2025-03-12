@@ -25,8 +25,8 @@ WITH created_pools AS (
             segmented_data [0] :: STRING
         ) :: INTEGER AS tick_spacing,
         CONCAT('0x', SUBSTR(segmented_data [1] :: STRING, 25, 40)) AS pool_address,
-        _log_id,
-        _inserted_timestamp
+        concat(tx_hash, '-', event_index) AS _log_id,
+        modified_timestamp AS _inserted_timestamp
     FROM
         {{ ref('silver__logs') }}
     WHERE

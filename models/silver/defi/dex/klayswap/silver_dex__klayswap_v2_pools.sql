@@ -37,8 +37,8 @@ WITH pool_creation AS (
             's2c',
             segmented_data [6] :: STRING
         )) AS pool_id,
-        _log_id,
-        _inserted_timestamp
+        concat(tx_hash, '-', event_index) AS _log_id,
+        modified_timestamp AS _inserted_timestamp
     FROM
         {{ ref ('silver__logs') }}
     WHERE

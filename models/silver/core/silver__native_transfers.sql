@@ -17,7 +17,7 @@ WITH base AS (
         from_address,
         to_address,
         value,
-        _call_id,
+        concat_ws('-', block_number, tx_position, CONCAT(type, '_', trace_address)) AS _call_id,
         _inserted_timestamp,
         value_precise_raw,
         value_precise,

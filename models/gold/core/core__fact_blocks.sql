@@ -10,6 +10,7 @@
 
 SELECT
     A.block_number AS block_number,
+    HASH as block_hash,
     block_timestamp,
     'mainnet' AS network,
     'kaia' AS blockchain,
@@ -19,7 +20,6 @@ SELECT
     extra_data,
     gas_limit,
     gas_used,
-    HASH,
     parent_hash,
     receipts_root,
     sha3_uncles,
@@ -64,7 +64,7 @@ SELECT
         transactions_root,
         'uncles',
         uncles
-    ) AS block_header_json,
+    ) AS block_header_json, --deprecate
     blocks_id AS fact_blocks_id,
     inserted_timestamp,
     modified_timestamp,

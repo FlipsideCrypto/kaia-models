@@ -41,8 +41,8 @@ swaps_base AS (
         ) AS amount_in,
         origin_from_address AS sender,
         origin_to_address AS tx_to,
-        _log_id,
-        _inserted_timestamp
+        concat(tx_hash, '-', event_index) AS _log_id,
+        modified_timestamp AS _inserted_timestamp
     FROM
         {{ ref('silver__logs') }}
         INNER JOIN pools p

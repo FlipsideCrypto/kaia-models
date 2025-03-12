@@ -52,8 +52,8 @@ swaps_base AS (
                 l_segmented_data [3] :: STRING
             )
         ) AS toAmount,
-        l._log_id,
-        l._inserted_timestamp
+        concat(l.tx_hash, '-', l.event_index) AS _log_id,
+        l.modified_timestamp AS _inserted_timestamp
     FROM
         {{ ref('silver__logs') }}
         l
