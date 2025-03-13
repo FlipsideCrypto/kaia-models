@@ -13,9 +13,9 @@ WITH contract_deployments AS (
         block_timestamp,
         from_address AS deployer_address,
         to_address AS contract_address,
-        _inserted_timestamp
+        modified_timestamp AS _inserted_timestamp
     FROM
-        {{ ref('silver__traces') }}
+        {{ ref('core__fact_traces') }}
     WHERE
         from_address = '0x5280c2d41dbbb9e17664a6c560194d99f329bbb6'
         AND to_address NOT IN (
@@ -23,8 +23,8 @@ WITH contract_deployments AS (
             '0x442f2c12bd436cfdc736170274287cd70c5b6ab5'
         ) -- Exclude testAsset
         AND TYPE ILIKE 'create%'
-        AND tx_status
-        AND trace_status
+        AND tx_succeeded
+        AND trace_succeeded
 
 {% if is_incremental() %}
 AND _inserted_timestamp >= (

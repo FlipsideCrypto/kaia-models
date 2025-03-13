@@ -43,11 +43,11 @@ WITH base_swaps AS (
         concat(tx_hash, '-', event_index) AS _log_id,
         modified_timestamp AS _inserted_timestamp
     FROM
-        {{ ref('silver__logs') }}
+        {{ ref('core__fact_event_logs') }}
     WHERE
         topics [0] :: STRING = '0x19b47279256b2a23a1665c810c8d55a1758940ee09377d4f8d26497a3577dc83'
         AND event_removed = 'false'
-        AND tx_status
+        AND tx_succeeded
 
 {% if is_incremental() %}
 AND _inserted_timestamp >= (

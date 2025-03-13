@@ -23,11 +23,11 @@ WITH pool_creation AS (
         concat(tx_hash, '-', event_index) AS _log_id,
         modified_timestamp AS _inserted_timestamp
     FROM
-        {{ ref ('silver__logs') }}
+        {{ ref ('core__fact_event_logs') }}
     WHERE
         contract_address = lower('0x1a1F14ec33BF8c2e66731f46D0A706e8025b43e9')
         AND topics [0] :: STRING = '0x0d3648bd0f6ba80134a33ba9275ac585d9d315f0ad8355cddefde31afa28d0e9' --PairCreated
-        AND tx_status
+        AND tx_succeeded
 
 {% if is_incremental() %}
 AND _inserted_timestamp >= (

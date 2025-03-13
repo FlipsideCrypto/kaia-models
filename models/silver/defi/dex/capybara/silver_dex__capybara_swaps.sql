@@ -55,13 +55,13 @@ swaps_base AS (
         concat(l.tx_hash, '-', l.event_index) AS _log_id,
         l.modified_timestamp AS _inserted_timestamp
     FROM
-        {{ ref('silver__logs') }}
+        {{ ref('core__fact_event_logs') }}
         l
         INNER JOIN pools p
         ON l.contract_address = p.pool_address
     WHERE
         topics [0] :: STRING = '0x7fa01e8d24e5a6ec56e00b4ff8ee7ed97e7650a7846ec494bbaa5d65f1be9ea4'
-        AND tx_status
+        AND tx_succeeded
 
 {% if is_incremental() %}
 AND _inserted_timestamp >= (

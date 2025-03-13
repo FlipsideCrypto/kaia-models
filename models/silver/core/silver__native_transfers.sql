@@ -22,13 +22,14 @@ WITH base AS (
         value_precise_raw,
         value_precise,
         tx_position,
-        trace_index
+        trace_index,
+        modified_timestamp AS _inserted_timestamp
     FROM
-        {{ ref('silver__traces') }}
+        {{ ref('core__fact_traces') }}
     WHERE
         value > 0
-        AND tx_status = TRUE
-        AND trace_status = TRUE
+        AND tx_succeeded
+        AND trace_succeeded
         AND TYPE NOT IN (
             'DELEGATECALL',
             'STATICCALL'
@@ -51,7 +52,7 @@ tx_table AS (
         to_address AS origin_to_address,
         origin_function_signature
     FROM
-        {{ ref('silver__transactions') }}
+        {{ ref('core__fact_transactions') }}
     WHERE
         tx_hash IN (
             SELECT
@@ -61,9 +62,9 @@ tx_table AS (
         )
 
 {% if is_incremental() %}
-AND _inserted_timestamp >= (
+AND modified_timestamp >= (
     SELECT
-        MAX(_inserted_timestamp) - INTERVAL '72 hours'
+        MAX(modified_timestamp) - INTERVAL '72 hours'
     FROM
         {{ this }}
 )
