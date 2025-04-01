@@ -44,7 +44,5 @@ jobs:
           dbt deps
       - name: Run DBT Jobs
         run: |
-          dbt run --threads 1 --vars '{"full_reload_mode": true}' -m silver__traces2 silver__fact_traces2
-  
-
+          dbt run --threads 1 silver__fact_traces2
 

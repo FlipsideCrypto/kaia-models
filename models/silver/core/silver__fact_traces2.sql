@@ -110,7 +110,7 @@ trace_index_sub_traces AS (
             b.tx_position
             ORDER BY
                 number_array ASC
-        ) - 1 AS trace_index,
+        ) - 1 AS trace_index, 
         b.trace_json,
         b.traces_id,
         b.source
@@ -336,12 +336,13 @@ heal_missing_data AS (
         JOIN {{ ref('silver__transactions') }} txs
             ON t.tx_position = txs.position
             AND t.block_number = txs.block_number
-            and txs.block_number > 160000000
+            
     WHERE
         (t.tx_hash IS NULL
         OR t.block_timestamp IS NULL
         OR t.tx_status IS NULL)
-        and t.block_number > 160000000
+    LIMIT 1000000000
+        
 )
 {% endif %},
 
