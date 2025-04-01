@@ -44,5 +44,5 @@ jobs:
           dbt deps
       - name: Run DBT Jobs
         run: |
-          dbt run --threads 1 -m silver__fact_traces2
+          dbt run --select silver__fact_traces2
 

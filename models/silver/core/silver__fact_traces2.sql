@@ -341,7 +341,7 @@ heal_missing_data AS (
         (t.tx_hash IS NULL
         OR t.block_timestamp IS NULL
         OR t.tx_status IS NULL)
-    LIMIT 1000000000
+    LIMIT {{ var('HEAL_LIMIT', 1000000000) }}
         
 )
 {% endif %},
