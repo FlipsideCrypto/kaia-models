@@ -110,7 +110,7 @@ trace_index_sub_traces AS (
             b.tx_position
             ORDER BY
                 number_array ASC
-        ) - 1 AS trace_index, 
+        ) - 1 AS trace_index,
         b.trace_json,
         b.traces_id,
         b.source
