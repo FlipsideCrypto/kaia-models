@@ -25,7 +25,7 @@ WITH silver_traces AS (
         1 = 1
 
     {% if is_incremental() and not var('full_reload_mode', false) %}
-        AND block_number > 160000000
+        AND block_number >= 160000000
         AND modified_timestamp > (
             SELECT
                 MAX(modified_timestamp)
@@ -35,18 +35,8 @@ WITH silver_traces AS (
                 block_number > 160000000
         ) 
     {% elif is_incremental() and var('full_reload_mode', false)  %}
-        AND block_number < 80000000
-        AND modified_timestamp > COALESCE(
-            (
-                SELECT
-                    MAX(modified_timestamp)
-                FROM
-                    {{ this }}
-                WHERE
-                    block_number < 80000000
-            ),
-            '2024-01-01'
-        )
+        AND block_number < {{ var('RELOAD_BLOCK_MAX', 10000000) }}
+        AND block_number >= {{ var('RELOAD_BLOCK_MIN', 10000000) }}
     {% else %}
         AND block_number <= 149500000
     {% endif %}
@@ -280,7 +270,7 @@ incremental_traces AS (
             ON f.tx_position = t.position
             AND f.block_number = t.block_number
 
-    {% if is_incremental() and not full_reload_mode %}
+    {% if is_incremental() and not var('full_reload_mode', false)%}
         AND t.modified_timestamp >= (
             SELECT
                 DATEADD('hour', -24, MAX(modified_timestamp))
