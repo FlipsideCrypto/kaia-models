@@ -35,7 +35,8 @@ WITH silver_traces AS (
                 block_number > 160000000
         ) 
     {% elif is_incremental() and var('full_reload_mode', false)  %}
-        AND block_number < {{ var('RELOAD_BLOCK', 10000000) }}
+        AND block_number < {{ var('RELOAD_BLOCK_MAX', 10000000) }}
+        AND block_number >= {{ var('RELOAD_BLOCK_MIN', 10000000) }}
     {% else %}
         AND block_number <= 149500000
     {% endif %}
