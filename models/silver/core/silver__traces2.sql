@@ -27,8 +27,6 @@ WITH bronze_traces AS (
                     {{ this }}
             )
             AND DATA :result IS NOT NULL
-        and block_number > 160000000
-        and partition_key > 160000000
 
     {% elif is_incremental() and var('full_reload_mode', false) and not var('initial_load', false) %}
         {{ ref('bronze__streamline_fr_traces') }}
