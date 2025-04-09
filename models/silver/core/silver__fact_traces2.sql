@@ -25,14 +25,11 @@ WITH silver_traces AS (
         1 = 1
 
     {% if is_incremental() and not var('full_reload_mode', false) %}
-        AND block_number >= 160000000
         AND modified_timestamp > (
             SELECT
                 MAX(modified_timestamp)
             FROM
                 {{ this }}
-            WHERE
-                block_number > 160000000
         ) 
     {% elif is_incremental() and var('full_reload_mode', false)  %}
         AND block_number < {{ var('RELOAD_BLOCK_MAX', 10000000) }}
