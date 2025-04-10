@@ -51,3 +51,4 @@ WHERE
             {{ this }}
     )
 {% endif %}
+dbt run -m models/silver/core/silver__fact_traces2.sql --vars '{"full_reload_mode": true, "RELOAD_BLOCK_MAX": 20000000, "RELOAD_BLOCK_MIN": 10000000}'
