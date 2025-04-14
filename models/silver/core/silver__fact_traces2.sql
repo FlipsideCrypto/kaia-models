@@ -268,12 +268,7 @@ incremental_traces AS (
             AND f.block_number = t.block_number
 
     {% if is_incremental() and not var('full_reload_mode', false)%}
-        AND t.modified_timestamp >= (
-            SELECT
-                DATEADD('hour', -24, MAX(modified_timestamp))
-            FROM
-                {{ this }}
-        )
+        WHERE t.block_number in (select distinct block_number from silver_traces)
     {% endif %}
 )
 
