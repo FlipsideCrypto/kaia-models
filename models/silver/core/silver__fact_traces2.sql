@@ -25,14 +25,11 @@ WITH silver_traces AS (
         1 = 1
 
     {% if is_incremental() and not var('full_reload_mode', false) %}
-        AND block_number >= 160000000
         AND modified_timestamp > (
             SELECT
                 MAX(modified_timestamp)
             FROM
                 {{ this }}
-            WHERE
-                block_number > 160000000
         ) 
     {% elif is_incremental() and var('full_reload_mode', false)  %}
         AND block_number < {{ var('RELOAD_BLOCK_MAX', 10000000) }}
@@ -271,12 +268,7 @@ incremental_traces AS (
             AND f.block_number = t.block_number
 
     {% if is_incremental() and not var('full_reload_mode', false)%}
-        AND t.modified_timestamp >= (
-            SELECT
-                DATEADD('hour', -24, MAX(modified_timestamp))
-            FROM
-                {{ this }}
-        )
+        WHERE t.block_number in (select distinct block_number from silver_traces)
     {% endif %}
 )
 
