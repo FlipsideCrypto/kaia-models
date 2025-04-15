@@ -1,7 +1,7 @@
 {{ config(
     materialized = 'incremental',
     unique_key = 'test_timestamp',
-    full_refresh = false,
+    full_refresh = true,
     tags = ['observability']
 ) }}
 
@@ -16,7 +16,6 @@ WITH summary_stats AS (
         {{ ref('silver__blocks') }}
     WHERE
         block_timestamp <= DATEADD('hour', -12, CURRENT_TIMESTAMP())
-        AND block_timestamp >= '2024-02-23 00:00:00.000' --earliest trace data backfilled 
 
 {% if is_incremental() %}
 AND (
@@ -81,7 +80,7 @@ broken_blocks AS (
     FROM
         {{ ref("silver__transactions") }}
         tx
-        LEFT JOIN {{ ref("silver__traces") }}
+        LEFT JOIN {{ ref("core__fact_traces") }}
         tr USING (
             block_number,
             tx_hash
