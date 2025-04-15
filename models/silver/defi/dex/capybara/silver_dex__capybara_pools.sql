@@ -13,9 +13,9 @@ WITH contract_deployments AS (
         block_timestamp,
         from_address AS deployer_address,
         to_address AS contract_address,
-        _inserted_timestamp
+        modified_timestamp as _inserted_timestamp
     FROM
-        {{ ref('silver__traces') }}
+        {{ ref('core__fact_traces') }}
     WHERE
         from_address = '0x5280c2d41dbbb9e17664a6c560194d99f329bbb6'
         AND to_address NOT IN (
