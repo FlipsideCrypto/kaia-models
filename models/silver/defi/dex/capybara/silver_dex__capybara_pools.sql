@@ -13,7 +13,7 @@ WITH contract_deployments AS (
         block_timestamp,
         from_address AS deployer_address,
         to_address AS contract_address,
-        modified_timestamp AS _inserted_timestamp
+        modified_timestamp as _inserted_timestamp
     FROM
         {{ ref('core__fact_traces') }}
     WHERE
