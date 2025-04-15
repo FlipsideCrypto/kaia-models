@@ -43,4 +43,4 @@ jobs:
           dbt deps
       - name: Run DBT Jobs
         run: |
-          dbt run -m "kaia_models,tag:curated"
+          dbt run -m "kaia_models,tag:curated" --exclude "models/bronze/api_udf/bronze_api__contract_abis.sql"
