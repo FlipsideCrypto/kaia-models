@@ -13,18 +13,14 @@ SELECT
     to_address AS created_contract_address,
     from_address AS creator_address,
     input AS created_contract_input,
-    _inserted_timestamp,
+    modified_timestamp as _inserted_timestamp,
     {{ dbt_utils.generate_surrogate_key(
         ['to_address']
     ) }} AS created_contracts_id,
     SYSDATE() AS inserted_timestamp,
     SYSDATE() AS modified_timestamp,
     '{{ invocation_id }}' AS _invocation_id
-FROM
-    {{ source(
-        'klaytn_silver',
-        'traces'
-    ) }}
+FROM {{ ref('core__fact_traces') }}
 WHERE
     TYPE ILIKE 'create%'
     AND to_address IS NOT NULL
@@ -44,4 +40,4 @@ AND _inserted_timestamp >= (
 
 qualify(ROW_NUMBER() over(PARTITION BY created_contract_address
 ORDER BY
-    block_number DESC, _inserted_timestamp DESC)) = 1
+    _inserted_timestamp DESC)) = 1
