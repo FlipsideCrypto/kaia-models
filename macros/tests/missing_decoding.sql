@@ -1,7 +1,7 @@
 {% test missing_decoded_logs(model) %}
 SELECT
     l.block_number,
-    l.CONCAT(tx_hash :: STRING, '-', event_index :: STRING) AS _log_id
+    CONCAT(l.tx_hash :: STRING, '-', l.event_index :: STRING) AS _log_id
 FROM
     {{ ref('core__fact_event_logs') }}
     l
