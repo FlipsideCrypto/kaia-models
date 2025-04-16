@@ -35,8 +35,15 @@ SELECT
     s,
     v,
     transactions_id AS fact_transactions_id,
-    inserted_timestamp,
-    modified_timestamp,
+    {% if is_incremental() %}
+        SYSDATE() AS inserted_timestamp,
+        SYSDATE() AS modified_timestamp
+    {% else %}
+        CASE WHEN block_timestamp >= date_trunc('hour',SYSDATE()) - interval '4 hours' THEN SYSDATE() 
+            ELSE GREATEST(block_timestamp, dateadd('day', -10, SYSDATE())) END AS inserted_timestamp,
+        CASE WHEN block_timestamp >= date_trunc('hour',SYSDATE()) - interval '4 hours' THEN SYSDATE() 
+            ELSE GREATEST(block_timestamp, dateadd('day', -10, SYSDATE())) END AS modified_timestamp
+    {% endif %}
     block_hash, --deprecate
     POSITION --deprecate
 FROM
