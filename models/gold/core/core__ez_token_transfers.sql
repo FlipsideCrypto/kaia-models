@@ -8,6 +8,7 @@ SELECT
     block_number,
     block_timestamp,
     tx_hash,
+    {# tx_position, #} -- new column
     event_index,
     origin_function_signature,
     origin_from_address,
@@ -22,12 +23,7 @@ SELECT
     amount_usd,
     decimals,
     symbol,
-    COALESCE (
-        transfers_id,
-        {{ dbt_utils.generate_surrogate_key(
-            ['tx_hash', 'event_index']
-        ) }}
-    ) AS ez_token_transfers_id,
+    transfers_id AS ez_token_transfers_id,
     inserted_timestamp,
     modified_timestamp,
     token_price, --deprecate

@@ -1,36 +1,33 @@
 {{ config(
-    materialized = 'incremental',
-    unique_key = "block_number",
-    incremental_strategy = 'delete+insert',
-    cluster_by = "block_timestamp::date",
-    post_hook = "ALTER TABLE {{ this }} ADD SEARCH OPTIMIZATION",
-    tags = ['non_realtime']
+    materialized = 'view',
+    persist_docs ={ "relation": true,
+    "columns": true }
 ) }}
 
 SELECT
     block_number,
     block_timestamp,
-    block_hash,
     tx_hash,
-    nonce,
-    POSITION,
-    origin_function_signature,
     from_address,
     to_address,
+    origin_function_signature,
     VALUE,
     value_precise_raw,
     value_precise,
     tx_fee,
     tx_fee_precise,
+    tx_status as tx_succeeded,
+    tx_type,
+    nonce,
+    POSITION as tx_position,
+    input_data,
     gas_price,
+    gas_used,
     effective_gas_price,
     gas AS gas_limit,
-    gas_used,
     cumulative_gas_used,
     max_fee_per_gas,
     max_priority_fee_per_gas,
-    input_data,
-    tx_status AS tx_succeeded,
     r,
     s,
     v,
@@ -42,13 +39,3 @@ FROM
         'klaytn_silver',
         'transactions'
     ) }}
-
-{% if is_incremental() %}
-WHERE
-    modified_timestamp > (
-        SELECT
-            MAX(modified_timestamp)
-        FROM
-            {{ this }}
-    )
-{% endif %}
