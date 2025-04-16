@@ -21,6 +21,7 @@ SELECT
     origin_to_address,
     origin_function_signature,
     tx_status AS tx_succeeded,
+    _log_id, --deprecate
     logs_id AS fact_event_logs_id,
     inserted_timestamp,
     modified_timestamp

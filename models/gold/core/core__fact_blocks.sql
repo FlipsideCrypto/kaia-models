@@ -10,7 +10,7 @@
 
 SELECT
     A.block_number AS block_number,
-    HASH as block_hash,
+    {# HASH as block_hash, #} --new column name and order
     block_timestamp,
     'mainnet' AS network,
     'kaia' AS blockchain,
@@ -20,6 +20,7 @@ SELECT
     extra_data,
     gas_limit,
     gas_used,
+    hash,
     parent_hash,
     receipts_root,
     sha3_uncles,
