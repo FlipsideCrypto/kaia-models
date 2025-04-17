@@ -31,7 +31,8 @@ WITH base AS (
         value_precise_raw,
         value_precise,
         tx_position,
-        trace_index
+        trace_index,
+        modified_timestamp AS _inserted_timestamp
     FROM
         {{ ref('core__fact_traces') }}
     WHERE
@@ -60,7 +61,7 @@ tx_table AS (
         to_address AS origin_to_address,
         origin_function_signature
     FROM
-        {{ ref('silver__transactions') }}
+        {{ ref('core__fact_transactions') }}
     WHERE
         tx_hash IN (
             SELECT
@@ -70,9 +71,9 @@ tx_table AS (
         )
 
 {% if is_incremental() %}
-AND _inserted_timestamp >= (
+AND modified_timestamp >= (
     SELECT
-        MAX(_inserted_timestamp) - INTERVAL '72 hours'
+        MAX(modified_timestamp) - INTERVAL '72 hours'
     FROM
         {{ this }}
 )

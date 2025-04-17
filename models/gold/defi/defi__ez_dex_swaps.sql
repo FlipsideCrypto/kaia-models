@@ -58,7 +58,7 @@ SELECT
   token_out,
   symbol_in,
   symbol_out,
-  _log_id,
+  _log_id, --deprecate
   complete_dex_swaps_id AS ez_dex_swaps_id,
   inserted_timestamp,
   modified_timestamp
