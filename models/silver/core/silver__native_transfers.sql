@@ -37,8 +37,8 @@ WITH base AS (
         {{ ref('core__fact_traces') }}
     WHERE
         value > 0
-        AND tx_succeeded
         AND trace_succeeded
+        AND tx_succeeded
         AND TYPE NOT IN (
             'DELEGATECALL',
             'STATICCALL'
