@@ -36,7 +36,7 @@ SELECT
     v,
     transactions_id AS fact_transactions_id,
     block_hash, --deprecate
-    POSITION --deprecate
+    POSITION, --deprecate
     {% if is_incremental() %}
         SYSDATE() AS inserted_timestamp,
         SYSDATE() AS modified_timestamp
