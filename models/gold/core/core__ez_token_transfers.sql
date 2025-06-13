@@ -4,11 +4,11 @@
     "columns": true }
 ) }}
 
-
 SELECT
     block_number,
     block_timestamp,
     tx_hash,
+    {# tx_position, #} -- new column
     event_index,
     origin_function_signature,
     origin_from_address,
@@ -23,10 +23,13 @@ SELECT
     amount_usd,
     decimals,
     symbol,
-    token_price,
-    _inserted_timestamp,
     transfers_id AS ez_token_transfers_id,
     inserted_timestamp,
-    modified_timestamp
+    modified_timestamp,
+    token_price, --deprecate
+    has_decimal, --deprecate
+    has_price, --deprecate
+    _log_id, --deprecate
+    _inserted_timestamp --deprecate
 FROM
     {{ ref('silver__transfers') }}

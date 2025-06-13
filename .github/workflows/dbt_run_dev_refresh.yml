@@ -21,8 +21,6 @@ env:
 concurrency:
   group: ${{ github.workflow }}
 
-
-
 jobs:
   run_dbt_jobs_refresh:
     runs-on: ubuntu-latest
@@ -44,6 +42,13 @@ jobs:
       - name: Run Dev Refresh
         run: |
           dbt run-operation run_sp_create_prod_clone
+
+  notify-failure:
+    needs: [run_dbt_jobs_refresh]
+    if: failure()
+    uses: ./.github/workflows/slack_notify.yml
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   run_dbt_jobs_udfs:
     runs-on: ubuntu-latest
@@ -67,3 +72,10 @@ jobs:
         run: |
           dbt run-operation create_udfs --vars '{"UPDATE_UDFS_AND_SPS":True}' -t dev
           dbt run -s livequery_models.deploy.core._live --vars '{"UPDATE_UDFS_AND_SPS":True}' -t dev
+
+  notify-failure2:
+    needs: [run_dbt_jobs_udfs]
+    if: failure()
+    uses: ./.github/workflows/slack_notify.yml
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

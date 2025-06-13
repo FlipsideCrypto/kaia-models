@@ -10,33 +10,42 @@
 SELECT
     block_number,
     block_timestamp,
-    block_hash,
     tx_hash,
-    nonce,
-    POSITION,
-    origin_function_signature,
     from_address,
     to_address,
+    origin_function_signature,
     VALUE,
     value_precise_raw,
     value_precise,
     tx_fee,
     tx_fee_precise,
+    tx_status as tx_succeeded,
+    tx_type, --new column
+    nonce,
+    POSITION as tx_position,
+    input_data,
     gas_price,
+    gas_used,
     effective_gas_price,
     gas AS gas_limit,
-    gas_used,
     cumulative_gas_used,
     max_fee_per_gas,
     max_priority_fee_per_gas,
-    input_data,
-    tx_status AS tx_succeeded,
     r,
     s,
     v,
     transactions_id AS fact_transactions_id,
-    inserted_timestamp,
-    modified_timestamp
+    block_hash, --deprecate
+    POSITION, --deprecate
+    {% if is_incremental() %}
+        SYSDATE() AS inserted_timestamp,
+        SYSDATE() AS modified_timestamp
+    {% else %}
+        CASE WHEN block_timestamp >= date_trunc('hour',SYSDATE()) - interval '4 hours' THEN SYSDATE() 
+            ELSE GREATEST(block_timestamp, dateadd('day', -10, SYSDATE())) END AS inserted_timestamp,
+        CASE WHEN block_timestamp >= date_trunc('hour',SYSDATE()) - interval '4 hours' THEN SYSDATE() 
+            ELSE GREATEST(block_timestamp, dateadd('day', -10, SYSDATE())) END AS modified_timestamp
+    {% endif %}
 FROM
     {{ source(
         'klaytn_silver',

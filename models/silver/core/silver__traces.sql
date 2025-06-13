@@ -27,40 +27,25 @@ WITH bronze_traces AS (
                     {{ this }}
             )
             AND DATA :result IS NOT NULL
-        and block_number > 160000000
-        and partition_key > 160000000
 
-    {% elif is_incremental() and var('full_reload_mode', false) and not var('initial_load', false) %}
+    {% elif is_incremental() and var('full_reload_mode', false) %}
         {{ ref('bronze__streamline_fr_traces') }}
         WHERE
-        DATA :result IS NOT NULL
-        AND partition_key BETWEEN (
-            SELECT
-               ROUND(MAX(block_number),-3)
-            FROM
-                {{ this }}
-            WHERE
-                block_number < 80000000
-        ) - 100000
-        AND (
-            SELECT
-                ROUND(MAX(block_number),-3)
-            FROM
-                {{ this }}
-            WHERE
-                block_number < 80000000
-        ) + 2000000
-
-    {% elif var('initial_load', false) %}
-        {{ ref('bronze__streamline_fr_traces') }}
-        WHERE 
-            DATA :result IS NOT NULL
-            AND block_number BETWEEN 0 AND 5000000
-            and partition_key < 5500000
-
+            partition_key BETWEEN (
+                SELECT
+                    MAX(partition_key) - 100000
+                FROM
+                    {{ this }}
+            )
+            AND (
+                SELECT
+                    MAX(partition_key) + 1000000
+                FROM
+                    {{ this }}
+            )
     {% else %}
         {{ ref('bronze__streamline_fr_traces') }}
-        WHERE block_number <= 149500000
+        WHERE block_number <= 5000000
     {% endif %}
 
     qualify(ROW_NUMBER() over (PARTITION BY block_number, tx_position

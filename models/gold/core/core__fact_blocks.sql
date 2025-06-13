@@ -10,6 +10,7 @@
 
 SELECT
     A.block_number AS block_number,
+    HASH as block_hash,
     block_timestamp,
     'mainnet' AS network,
     'kaia' AS blockchain,
@@ -19,7 +20,6 @@ SELECT
     extra_data,
     gas_limit,
     gas_used,
-    HASH,
     parent_hash,
     receipts_root,
     sha3_uncles,
@@ -64,10 +64,18 @@ SELECT
         transactions_root,
         'uncles',
         uncles
-    ) AS block_header_json,
+    ) AS block_header_json, --deprecate
+    hash, --deprecate
     blocks_id AS fact_blocks_id,
-    inserted_timestamp,
-    modified_timestamp,
+    {% if is_incremental() %}
+        SYSDATE() AS inserted_timestamp,
+        SYSDATE() AS modified_timestamp
+    {% else %}
+        CASE WHEN block_timestamp >= date_trunc('hour',SYSDATE()) - interval '4 hours' THEN SYSDATE() 
+            ELSE GREATEST(block_timestamp, dateadd('day', -10, SYSDATE())) END AS inserted_timestamp,
+        CASE WHEN block_timestamp >= date_trunc('hour',SYSDATE()) - interval '4 hours' THEN SYSDATE() 
+            ELSE GREATEST(block_timestamp, dateadd('day', -10, SYSDATE())) END AS modified_timestamp
+    {% endif %}
 FROM
     {{ source(
         'klaytn_silver',

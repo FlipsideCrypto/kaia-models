@@ -24,32 +24,32 @@ WITH silver_traces AS (
     WHERE
         1 = 1
 
-    {% if is_incremental() and not var('full_reload_mode', false) %}
-        AND block_number > 160000000
-        AND modified_timestamp > (
-            SELECT
-                MAX(modified_timestamp)
-            FROM
-                {{ this }}
-            WHERE
-                block_number > 160000000
-        ) 
-    {% elif is_incremental() and var('full_reload_mode', false)  %}
-        AND block_number < 80000000
-        AND modified_timestamp > COALESCE(
-            (
-                SELECT
-                    MAX(modified_timestamp)
-                FROM
-                    {{ this }}
-                WHERE
-                    block_number < 80000000
-            ),
-            '2024-01-01'
+{% if is_incremental() and not full_reload_mode %}
+AND modified_timestamp > (
+    SELECT
+        MAX(modified_timestamp)
+    FROM
+        {{ this }}
+) {% elif is_incremental() and full_reload_mode %}
+AND block_number BETWEEN (
+    SELECT
+        MAX(
+            block_number
         )
-    {% else %}
-        AND block_number <= 149500000
-    {% endif %}
+    FROM
+        {{ this }}
+)
+AND (
+    SELECT
+        MAX(
+            block_number
+        ) + 1000000
+    FROM
+        {{ this }}
+)
+{% else %}
+    AND block_number <= 5000000
+{% endif %}
 ),
 
 sub_traces AS (
