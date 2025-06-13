@@ -3,10 +3,9 @@ run-name: dbt_run_trace_backfill
 
 on:
   workflow_dispatch:
-  schedule:
-    # Runs “At Minute 50 every hour” (see https://crontab.guru)
-    - cron: "50 * * * *"
-
+    branches:
+      - "main"
+    
 env:
   DBT_PROFILES_DIR: ./
 
