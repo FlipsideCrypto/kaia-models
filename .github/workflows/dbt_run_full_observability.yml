@@ -3,9 +3,8 @@ run-name: dbt_run_full_observability
 
 on:
   workflow_dispatch:
-  schedule:
-    # Runs “At 17:00 on day-of-month 1.” (see https://crontab.guru)
-    - cron: '30 17 1 * *'
+    branches:
+      - "main"
     
 env:
   DBT_PROFILES_DIR: ./
